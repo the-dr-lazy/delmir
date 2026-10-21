@@ -1,0 +1,69 @@
+# THROWAWAY SPIKE for the-dr-lazy/delmir#32: measures, on stock GitHub-hosted
+# runners, (1) a networked lockfile regeneration and (2) a cold sandboxed
+# `nix build` of the RN + ONNX Runtime APK. Lives only on prototype/nix-apk.
+name: spike-nix-apk
+on:
+  push:
+    branches: [prototype/nix-apk]
+    paths: [spike-nix-apk/**, .github/workflows/spike-nix-apk.yml]
+jobs:
+  lockfile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - run: nproc; free -m; df -BM /
+      - uses: cachix/install-nix-action@v31
+      - name: Regenerate deps.json (mitm-cache record)
+        run: |
+          t0=$(date +%s)
+          nix build ./spike-nix-apk#apk.mitmCache.updateScript --out-link update-script
+          t1=$(date +%s)
+          # Ubuntu 24.04 blocks unprivileged user namespaces, so no bwrap.
+          USE_BWRAP=0 ./update-script
+          t2=$(date +%s)
+          echo "eval_and_build_script_seconds=$((t1-t0)) update_script_seconds=$((t2-t1))"
+          ls -l spike-nix-apk/deps.json
+          git diff --stat
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deps-json
+          path: spike-nix-apk/deps.json
+
+  cold-build:
+    needs: lockfile
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: deps-json
+          path: spike-nix-apk
+      - run: nproc; free -m; df -BM /
+      - uses: cachix/install-nix-action@v31
+      - run: df -BM /
+      - name: Cold nix build with disk sampler
+        run: |
+          # Sample used disk on / every 5 s; keep the peak.
+          ( peak=0; while sleep 5; do u=$(df -BM --output=used / | tail -1 | tr -dc 0-9); (( u > peak )) && peak=$u; echo $peak > /tmp/peak-used-mib; done ) &
+          sampler=$!
+          base=$(df -BM --output=used / | tail -1 | tr -dc 0-9)
+          avail=$(df -BM --output=avail / | tail -1 | tr -dc 0-9)
+          t0=$(date +%s)
+          status=0
+          nix build ./spike-nix-apk#apk -L --out-link result > build.log 2>&1 || status=$?
+          t1=$(date +%s)
+          sleep 6; kill $sampler || true
+          tail -n 200 build.log
+          echo "status=$status wall_seconds=$((t1-t0))"
+          echo "disk_used_before_mib=$base disk_avail_before_mib=$avail peak_used_mib=$(cat /tmp/peak-used-mib) peak_delta_mib=$(( $(cat /tmp/peak-used-mib) - base ))"
+          df -BM /
+          exit $status
+      - name: Results
+        if: always()
+        run: |
+          cat result/spike-metrics.txt || true
+          ls -l result/ || true
+          nix path-info -S ./spike-nix-apk#apk.mitmCache ./spike-nix-apk#apk.androidsdk || true
+          du -sh /nix/store
