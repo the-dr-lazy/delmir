@@ -10,6 +10,8 @@
   nodejs_22,
   importNpmLock,
   procps,
+  ninja,
+  runCommand,
 }:
 let
   android = androidenv.composeAndroidPackages {
@@ -18,13 +20,21 @@ let
     includeNDK = true;
     ndkVersions = [ "27.1.12297006" ];
     includeCmake = true;
-    cmakeVersions = [ "3.22.1" ];
+    cmakeVersions = [ "3.31.6" ]; # 3.22.1's bundled ninja segfaults after autoPatchelf (glibc 2.44)
     includeEmulator = false;
     includeSystemImages = false;
     includeSources = false;
     toolsVersion = null;
   };
   sdk = "${android.androidsdk}/libexec/android-sdk";
+  # androidenv autoPatchelfs Google's ninja into a binary that segfaults (seen with both
+  # CMake 3.22.1 and 3.31.6), so keep the SDK's CMake but swap in nixpkgs' ninja.
+  cmakeDir = runCommand "android-cmake-3.31.6-nixpkgs-ninja" { } ''
+    mkdir -p $out
+    cp -rs ${sdk}/cmake/3.31.6/. $out/
+    chmod -R u+w $out/bin
+    ln -sf ${ninja}/bin/ninja $out/bin/ninja
+  '';
   jdk = jdk17_headless;
   # nixpkgs' gradle_9 (9.8.0) bundles Kotlin 2.4 metadata, which the RN Gradle plugin's
   # Kotlin 2.2 compiler rejects, so pin the RN template's wrapper version instead.
@@ -112,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo "phase build start $(date +%s)" >> "$NIX_BUILD_TOP/.spike-times"
     export ANDROID_USER_HOME=$TMPDIR/android-user-home
     mkdir -p $ANDROID_USER_HOME
-    printf 'sdk.dir=%s\ncmake.dir=%s\n' ${sdk} ${sdk}/cmake/3.22.1 > android/local.properties
+    printf 'sdk.dir=%s\ncmake.dir=%s\n' ${sdk} ${cmakeDir} > android/local.properties
     # onnxruntime-react-native 1.24.3 calls org.gradle.util.VersionNumber, which Gradle 9
     # removed; the guarded branch is for RN < 0.71 only, so disable it.
     substituteInPlace node_modules/onnxruntime-react-native/android/build.gradle \
@@ -129,5 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   allowedReferences = [ ];
 
-  passthru.androidsdk = android.androidsdk;
+  passthru = {
+    androidsdk = android.androidsdk;
+    inherit cmakeDir;
+  };
 })
