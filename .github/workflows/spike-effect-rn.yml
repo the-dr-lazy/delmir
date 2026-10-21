@@ -1,0 +1,49 @@
+# THROWAWAY SPIKE for the-dr-lazy/delmir#43: records the Gradle lockfiles and builds every APK
+# variant with Nix on a stock runner (the local host's network drops mitm-cache fetches).
+# Lives only on the spike branch.
+name: spike-effect-rn
+on:
+  push:
+    branches: [claude/elastic-lalande-f3df07]
+    paths: [spike-effect-rn/**, .github/workflows/spike-effect-rn.yml]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - name: Record deps.json and deps-op18.json
+        run: |
+          for v in apk apk-op18; do
+            nix build ./spike-effect-rn#$v.mitmCache.updateScript --out-link us-$v
+            for i in 1 2 3; do
+              # Ubuntu 24.04 blocks unprivileged user namespaces, so no bwrap.
+              USE_BWRAP=0 ./us-$v && break
+              [ $i = 3 ] && exit 1
+            done
+          done
+          ls -l spike-effect-rn/deps*.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lockfiles
+          path: spike-effect-rn/deps*.json
+      - name: Build APK variants (sandboxed)
+        run: |
+          mkdir -p apks
+          for v in apk apk-op18 apk-local apk-baseline apk-debug; do
+            t0=$(date +%s)
+            nix build ./spike-effect-rn#$v -L --out-link result-$v > build-$v.log 2>&1 \
+              && echo "$v ok $(( $(date +%s) - t0 )) s" || { tail -n 80 build-$v.log; echo "$v FAILED"; }
+            grep -h "OP-SQLITE" build-$v.log | sort -u || true
+            cp result-$v/*.apk apks/ 2>/dev/null || true
+          done
+          ls -l apks
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: apks
+          path: |
+            apks/*.apk
+            build-*.log

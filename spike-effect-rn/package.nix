@@ -105,7 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mitmCache = gradle.fetchDeps {
     pkg = finalAttrs.finalPackage;
-    data = ./deps.json;
+    # op-sqlite 18 may pull other Maven artifacts, so it records its own lockfile.
+    data = if opSqlite18 then ./deps-op18.json else ./deps.json;
   };
   gradleBuildTask = gradleTask;
   # Record what both build types need, so one deps.json serves every variant.
