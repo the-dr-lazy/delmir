@@ -54,8 +54,12 @@ _Avoid_: gate, filter, quality check
 
 ### Anatomy
 
+**Culprit lesion**:
+The lesion angiography identifies as the cause of an OMI, whatever its mechanism (plaque rupture, dissection, embolus), including one already reperfused.
+_Avoid_: culprit, target lesion
+
 **Culprit vessel**:
-The coronary artery system (LAD, LCx or RCA) containing the lesion that caused an OMI, with each branch counted as the system that supplies it in that patient. Exists only for an OMI.
+The coronary artery system (LAD, LCx or RCA) that a single culprit lesion lies in, with each branch counted as the system it arises from in that patient: diagonals in the LAD, the ramus and obtuse marginals in the LCx, RV branches in the RCA, and the PDA and posterolateral branches in whichever artery gives rise to them. Exists only for an OMI whose culprit lesions all lie in one native system beyond the left main; a left main or graft culprit, culprits in more than one system, or an unnamed culprit has none.
 _Avoid_: culprit artery, infarct territory
 
 **Infarct territory**:
