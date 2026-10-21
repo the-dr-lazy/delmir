@@ -1,0 +1,363 @@
+<!doctype html>
+<!--
+  PROTOTYPE — throwaway. Answers ticket #6: "How does the app present P(OMI) and the culprit vessel?"
+  Four structurally different result screens, switchable via ?variant=A|B|C|D, each shown across
+  six reading scenarios via ?scenario=…, with a 2-way / 3-way call toggle via ?call=2|3.
+  Open the file in a browser. ← → cycle variants, ↑ ↓ cycle scenarios, C toggles the call.
+  All numbers are made up. Thresholds are placeholders, not proposals.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Result Screen Prototype</title>
+<style>
+  :root {
+    --bg: #e9e7e2; --phone: #ffffff; --ink: #1d1d1f; --muted: #6b6b70; --line: #dddbd5;
+    --omi: #c62828; --omi-bg: #fdecea; --not: #1f7a5a; --not-bg: #e6f4ee;
+    --ind: #b26a00; --ind-bg: #fff3e0; --dec: #555; --dec-bg: #eeeeee;
+    --lad: #3b5bdb; --lcx: #e8590c; --rca: #2b8a3e; --grid: #f6c9c9;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .stage { display: flex; gap: 32px; justify-content: center; align-items: flex-start; padding: 24px 16px 96px; }
+  .phone { width: 390px; min-height: 780px; background: var(--phone); border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.18); overflow: hidden; display: flex; flex-direction: column; }
+  .notes { width: 340px; font-size: 14px; }
+  .notes h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 20px 0 6px; }
+  .notes ul { margin: 0; padding-left: 18px; }
+  .notes .q { background: #fff; border-left: 4px solid var(--ind); padding: 10px 12px; border-radius: 6px; }
+  @media (max-width: 800px) {
+    .stage { padding: 0 0 96px; }
+    .phone { width: 100%; border-radius: 0; box-shadow: none; min-height: 100vh; }
+    .notes { display: none; }
+  }
+  .appbar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .appbar b { flex: 1; }
+  .appbar small { color: var(--muted); }
+  .content { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .footer { padding: 12px 16px 18px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  .btnrow { display: flex; gap: 8px; }
+  .btn { flex: 1; padding: 11px; border-radius: 10px; border: 1px solid var(--line); background: #fafafa; font: inherit; font-weight: 600; text-align: center; }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .disclaimer { font-size: 11.5px; color: var(--muted); text-align: center; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; background: #f1f1f1; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .muted { color: var(--muted); }
+  .k-omi { color: var(--omi); } .k-not { color: var(--not); } .k-ind { color: var(--ind); } .k-dec { color: var(--dec); }
+  .bg-omi { background: var(--omi-bg); } .bg-not { background: var(--not-bg); } .bg-ind { background: var(--ind-bg); } .bg-dec { background: var(--dec-bg); }
+  .card { border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+  .label { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 6px; }
+
+  /* A — verdict banner */
+  .verdict { border-radius: 16px; padding: 22px 18px; text-align: center; }
+  .verdict .big { font-size: 44px; font-weight: 800; letter-spacing: -.01em; line-height: 1.05; }
+  .verdict .sub { margin-top: 6px; font-weight: 600; }
+  .vessel-big { font-size: 30px; font-weight: 800; }
+  .others { color: var(--muted); font-size: 14px; }
+
+  /* B — probability scale */
+  .pnum { font-size: 56px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .pint { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .scale { position: relative; height: 54px; margin-top: 8px; }
+  .scale .track { position: absolute; top: 18px; left: 0; right: 0; height: 14px; border-radius: 7px; overflow: hidden; display: flex; }
+  .scale .ticks { position: absolute; top: 36px; left: 0; right: 0; font-size: 11px; color: var(--muted); }
+  .scale .ticks span { position: absolute; transform: translateX(-50%); }
+  .scale .whisk { position: absolute; top: 24px; height: 2px; background: var(--ink); }
+  .scale .ci { position: absolute; top: 14px; height: 22px; border: 2px solid var(--ink); border-radius: 4px; background: rgba(255,255,255,.35); }
+  .scale .pt { position: absolute; top: 10px; width: 4px; height: 30px; margin-left: -2px; background: var(--ink); border-radius: 2px; }
+  .stack { display: flex; height: 26px; border-radius: 8px; overflow: hidden; }
+  .stack div { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; }
+  .faded { opacity: .35; filter: grayscale(.6); }
+  .meter { height: 8px; background: #eee; border-radius: 4px; position: relative; }
+  .meter i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+  .meter b { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); }
+
+  /* C — ECG with lead attribution */
+  .ecg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--grid); padding: 2px; border-radius: 8px; }
+  .lead { position: relative; background: #fff7f7; height: 56px; }
+  .lead.rhythm { grid-column: 1 / -1; }
+  .lead svg { width: 100%; height: 100%; display: block; }
+  .lead .nm { position: absolute; left: 3px; top: 1px; font-size: 10px; font-weight: 700; }
+  .lead .hot { position: absolute; inset: 0; pointer-events: none; }
+  .lead .bad { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, rgba(0,0,0,.18) 0 4px, transparent 4px 9px); }
+  .strip { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .vrow { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; }
+  .vbar { height: 10px; border-radius: 5px; background: #eee; overflow: hidden; }
+  .vbar i { display: block; height: 100%; }
+
+  /* D — report readout */
+  .readout { font: 13.5px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; background: #fbfaf7; border: 1px solid var(--line); border-radius: 10px; padding: 12px; white-space: pre; overflow-x: auto; }
+  .readout .h { font-weight: 700; }
+
+  /* floating switcher (not part of the design) */
+  .switcher { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 10;
+    display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 999px;
+    background: #111; color: #fff; box-shadow: 0 6px 24px rgba(0,0,0,.35); font-size: 13px; max-width: calc(100vw - 16px); }
+  .switcher button { background: #2a2a2a; color: #fff; border: 0; border-radius: 999px; padding: 7px 11px; font: inherit; cursor: pointer; }
+  .switcher button:hover { background: #3a3a3a; }
+  .switcher .lbl { padding: 0 6px; white-space: nowrap; }
+  .switcher select { background: #2a2a2a; color: #fff; border: 0; border-radius: 999px; padding: 7px 8px; font: inherit; max-width: 170px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="phone" id="phone"></div>
+  <aside class="notes" id="notes"></aside>
+</div>
+<div class="switcher" id="switcher"></div>
+
+<script>
+// ---------- made-up readings ----------
+const LEADS = ["I","aVR","V1","V4","II","aVL","V2","V5","III","aVF","V3","V6"]; // standard 3x4 print layout
+const SCENARIOS = {
+  "omi-lad": { name: "OMI · clear LAD", p: .91, ci: [.84,.95], q: .92, qNote: "Good",
+    v: { LAD: .78, RCA: .15, LCx: .07 },
+    attr: { V2: .9, V3: 1, V4: .8, I: .45, aVL: .55, V1: .3, III: .25 },
+    st: { V1: .5, V2: 1.4, V3: 1.6, V4: 1.1, I: .5, aVL: .6, III: -.4, II: -.15, aVF: -.3 } },
+  "omi-unclear": { name: "OMI · vessel unclear", p: .76, ci: [.62,.86], q: .88, qNote: "Good",
+    v: { RCA: .48, LCx: .44, LAD: .08 },
+    attr: { II: .7, III: .8, aVF: .75, V1: .6, V2: .65, V3: .4, aVL: .3 },
+    st: { II: .6, III: .8, aVF: .7, V1: -.7, V2: -.9, V3: -.5, aVL: -.4, I: -.2 } },
+  "borderline": { name: "Borderline", p: .38, ci: [.21,.57], q: .85, qNote: "Good",
+    v: { LAD: .41, RCA: .35, LCx: .24 },
+    attr: { V2: .5, V3: .45, aVL: .3, III: .2 },
+    st: { V2: .3, V3: .35, aVL: .15 } },
+  "not-omi": { name: "Not-OMI", p: .04, ci: [.02,.08], q: .95, qNote: "Good",
+    v: { LAD: .36, RCA: .40, LCx: .24 }, attr: {}, st: {} },
+  "low-quality": { name: "Read, poor signal", p: .67, ci: [.38,.87], q: .48, qNote: "Poor: baseline wander in V1–V3, V3 partly cropped",
+    v: { LAD: .55, RCA: .27, LCx: .18 },
+    attr: { V2: .7, V3: .6, V4: .5, aVL: .3 }, noisy: ["V1","V2","V3"],
+    st: { V2: .9, V3: 1, V4: .7, aVL: .3 } },
+  "declined": { name: "Declined", declined: true, reason: "Paced rhythm",
+    detail: "Example reason only: which ECGs DELMIR declines is ticket #5.",
+    action: "Nothing to retry.", bad: [], st: {}, paced: true },
+  "declined-photo": { name: "Declined · unreadable photo", declined: true, reason: "Leads V4–V6 could not be digitised",
+    detail: "The right edge of the printout is outside the photo.",
+    action: "Retake the photo with the whole printout in frame.", bad: ["V4","V5","V6"], st: {} },
+};
+const VARIANTS = {
+  A: { name: "Verdict banner", render: renderA,
+    asks: ["Calibrated P(OMI) (shown as a %, secondary)", "Per-vessel probabilities (shown as one name + %)", "A quality score, mapped to Good / Fair / Poor", "No interval, no lead attribution"],
+    idea: "Call first, number second. Reads like an ECG machine's interpretation line; the vessel appears only on an OMI call." },
+  B: { name: "Probability scale", render: renderB,
+    asks: ["Calibrated P(OMI)", "An uncertainty interval for P(OMI) (ensemble or MC dropout)", "Per-vessel probabilities conditional on OMI", "A quality score on a 0–100 scale with a decline threshold", "No lead attribution"],
+    idea: "Number first. The call is just where the point falls among the thresholds; the vessel bar is always there, faded unless the call is OMI." },
+  C: { name: "ECG + lead attribution", render: renderC,
+    asks: ["Calibrated P(OMI)", "Per-vessel probabilities", "A per-lead attribution (e.g. integrated gradients summed per lead)", "Per-lead signal quality (to hatch bad leads)", "No interval"],
+    idea: "The digitised ECG is the hero, tinted by how much each lead drove the call, so you can check the model's reading against your own." },
+  D: { name: "Report readout", render: renderD,
+    asks: ["Everything in A–C, printed as text", "Model and digitizer versions (from the manifest)", "Placeholder thresholds printed with the call"],
+    idea: "Dense, text-first, research-flavoured: everything on one screen, nothing hidden, made for comparing readings and screenshots." },
+};
+const RULE_OUT = .15, RULE_IN = .60; // placeholders
+
+// ---------- state ----------
+const qs = new URLSearchParams(location.search);
+let state = {
+  variant: VARIANTS[qs.get("variant")] ? qs.get("variant") : "A",
+  scenario: SCENARIOS[qs.get("scenario")] ? qs.get("scenario") : "omi-lad",
+  call: qs.get("call") === "2" ? 2 : 3,
+};
+function setState(patch) {
+  state = { ...state, ...patch };
+  const u = new URL(location.href);
+  u.searchParams.set("variant", state.variant); u.searchParams.set("scenario", state.scenario); u.searchParams.set("call", state.call);
+  try { history.replaceState(null, "", u); } catch {}
+  render();
+}
+
+// ---------- helpers ----------
+const pct = x => Math.round(x * 100);
+function callOf(s) {
+  if (s.declined) return { key: "dec", text: "Declined", long: "Not read" };
+  if (state.call === 2) return s.p >= RULE_IN ? { key: "omi", text: "OMI", long: "OMI" } : { key: "not", text: "Not-OMI", long: "Not-OMI" };
+  if (s.p >= RULE_IN) return { key: "omi", text: "OMI", long: "OMI" };
+  if (s.p < RULE_OUT) return { key: "not", text: "Not-OMI", long: "Not-OMI" };
+  return { key: "ind", text: "Indeterminate", long: "Indeterminate" };
+}
+function confidenceWord(s) {
+  const w = s.ci[1] - s.ci[0];
+  return s.q < .6 ? "Low confidence: poor signal" : w > .3 ? "Moderate confidence" : "High confidence";
+}
+const VCOL = { LAD: "var(--lad)", LCx: "var(--lcx)", RCA: "var(--rca)" };
+const vesselsSorted = s => Object.entries(s.v).sort((a, b) => b[1] - a[1]);
+const qualityWord = q => q >= .8 ? "Good" : q >= .6 ? "Fair" : "Poor";
+const qualityColor = q => q >= .8 ? "var(--not)" : q >= .6 ? "var(--ind)" : "var(--omi)";
+function appbar(title) {
+  return `<div class="appbar"><span>←</span><b>${title}</b><small>Photo · 21 Oct 14:32</small></div>`;
+}
+function footer(s) {
+  return `<div class="footer">
+    <div class="btnrow">${s.declined && s.bad.length ? `<div class="btn primary">Retake photo</div>` : `<div class="btn primary">Save case</div>`}<div class="btn">Discard</div></div>
+    <div class="disclaimer">Research tool. Not a medical device. Do not use for patient care.</div></div>`;
+}
+
+// fake beat: P, QRS, ST offset, T. st is ST deviation in "mm"-ish units (+ elevation).
+function beatPath(x0, base, st, lead, scale) {
+  const neg = lead === "aVR";
+  const r = (neg ? -1 : 1) * (lead.startsWith("V") && ["V1","V2"].includes(lead) ? .5 : 1);
+  const S = scale, y = v => base - v * S;
+  const t = (neg ? -.35 : .35) + st * .6;
+  const pts = [[0,0],[6,0],[9,.12],[12,0],[18,0],[20,-.12*r],[23,1.2*r],[26,-.35*r],[28,st],[36,st],[43,t],[50,0],[60,0]];
+  return pts.map(([dx, v], i) => `${i ? "L" : "M"}${(x0 + dx).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+}
+function leadSvg(lead, s, beats = 2, w = 120) {
+  const st = (s.st || {})[lead] || 0, noisy = (s.noisy || []).includes(lead);
+  let d = "", step = w / beats;
+  for (let b = 0; b < beats; b++) d += " " + beatPath(b * step + 2, 34, st, lead, 14);
+  if (s.paced) d = d.replace(/M([\d.]+),([\d.]+)/g, (m, x, y) => `M${x},${y} L${x},${(+y - 22).toFixed(1)} L${x},${y}`);
+  const wobble = noisy ? `transform="rotate(${lead === "V2" ? 3 : -2} 60 34)"` : "";
+  return `<svg viewBox="0 0 ${w} 56" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="#222" stroke-width="1.1" ${wobble}/></svg>`;
+}
+
+// ---------- Variant A: verdict banner ----------
+function renderA(s) {
+  const c = callOf(s);
+  let body = `<div class="verdict bg-${c.key}"><div class="big k-${c.key}">${c.long}</div>`;
+  if (s.declined) body += `<div class="sub">${s.reason}</div></div>
+    <div class="card"><div class="label">Why</div>${s.detail}</div>
+    <div class="card"><div class="label">What now</div>${s.action}</div>`;
+  else {
+    body += `<div class="sub">${state.call === 3 ? confidenceWord(s) : ""}</div>
+      <div class="muted" style="margin-top:4px">P(OMI) ${pct(s.p)}%</div></div>`;
+    if (c.key === "omi") {
+      const vs = vesselsSorted(s), [top, tp] = vs[0];
+      body += `<div class="card"><div class="label">Culprit vessel</div>` + (tp >= .6
+        ? `<div class="vessel-big" style="color:${VCOL[top]}">${top} <span class="muted" style="font-size:18px">${pct(tp)}%</span></div>
+           <div class="others">${vs.slice(1).map(([n, p]) => `${n} ${pct(p)}%`).join(" · ")}</div>`
+        : `<div class="vessel-big">Unclear</div><div class="others">${vs.slice(0, 2).map(([n, p]) => `<b style="color:${VCOL[n]}">${n}</b> ${pct(p)}%`).join(" or ")} · ${vs[2][0]} ${pct(vs[2][1])}%</div>`) + `</div>`;
+    }
+    body += `<div><span class="chip"><span class="dot" style="background:${qualityColor(s.q)}"></span>Signal quality: ${qualityWord(s.q)}</span></div>`;
+    if (s.q < .8) body += `<div class="muted" style="font-size:13px">${s.qNote}</div>`;
+  }
+  return appbar("Reading") + `<div class="content">${body}</div>` + footer(s);
+}
+
+// ---------- Variant B: probability scale ----------
+function renderB(s) {
+  const c = callOf(s);
+  let body;
+  if (s.declined) {
+    body = `<div><div class="label">P(OMI)</div><div class="pnum k-dec">—</div><div class="pint">No probability: ECG declined</div></div>
+      <div class="card bg-dec"><b>${s.reason}</b><div class="muted">${s.detail}</div><div style="margin-top:8px">${s.action}</div></div>`;
+  } else {
+    const zones = state.call === 3
+      ? `<div style="width:${RULE_OUT*100}%;background:var(--not-bg)"></div><div style="width:${(RULE_IN-RULE_OUT)*100}%;background:var(--ind-bg)"></div><div style="flex:1;background:var(--omi-bg)"></div>`
+      : `<div style="width:${RULE_IN*100}%;background:var(--not-bg)"></div><div style="flex:1;background:var(--omi-bg)"></div>`;
+    const ticks = [0, ...(state.call === 3 ? [RULE_OUT] : []), RULE_IN, 1].map(t => `<span style="left:${t*100}%">${t}</span>`).join("");
+    body = `<div><div class="label">P(OMI)</div>
+        <div style="display:flex;align-items:baseline;gap:12px"><div class="pnum k-${c.key}">${s.p.toFixed(2)}</div>
+        <div><div class="k-${c.key}" style="font-weight:800;font-size:18px">${c.text}</div><div class="pint">95% interval ${s.ci[0].toFixed(2)}–${s.ci[1].toFixed(2)}</div></div></div>
+        <div class="scale"><div class="track">${zones}</div>
+          <div class="ci" style="left:${s.ci[0]*100}%;width:${(s.ci[1]-s.ci[0])*100}%"></div>
+          <div class="pt" style="left:${s.p*100}%"></div><div class="ticks">${ticks}</div></div></div>`;
+    const vs = vesselsSorted(s), on = c.key === "omi";
+    body += `<div class="card ${on ? "" : "faded"}"><div class="label">Culprit vessel ${on ? "" : "· if this were an OMI"}</div>
+      <div class="stack">${vs.map(([n, p]) => `<div style="width:${p*100}%;background:${VCOL[n]}">${p > .12 ? `${n} ${pct(p)}` : ""}</div>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:6px">${vs.map(([n, p]) => `${n} ${p.toFixed(2)}`).join(" · ")}</div></div>`;
+    body += `<div class="card"><div class="label">Signal quality ${pct(s.q)} / 100</div>
+      <div class="meter"><i style="width:${s.q*100}%;background:${qualityColor(s.q)}"></i><b style="left:40%" title="decline below"></b></div>
+      <div class="muted" style="font-size:12.5px;margin-top:6px">${s.qNote}${s.q < .8 ? " · widens the interval" : ""} · declined below 40</div></div>`;
+  }
+  return appbar("Reading") + `<div class="content">${body}</div>` + footer(s);
+}
+
+// ---------- Variant C: ECG with lead attribution ----------
+function renderC(s) {
+  const c = callOf(s), attr = s.attr || {}, bad = s.bad || [];
+  const grid = LEADS.map(l => `<div class="lead"><span class="nm">${l}</span>${leadSvg(l, s)}
+      ${attr[l] && !s.declined ? `<div class="hot" style="background:rgba(198,40,40,${(attr[l]*.38).toFixed(2)})"></div>` : ""}
+      ${bad.includes(l) || (s.noisy || []).includes(l) ? `<div class="bad"></div>` : ""}</div>`).join("")
+    + `<div class="lead rhythm"><span class="nm">II</span>${leadSvg("II", s, 8, 480)}</div>`;
+  let body = `<div class="ecg">${grid}</div>`;
+  if (s.declined) {
+    body += `<div class="strip"><span class="chip bg-dec k-dec">Declined</span><b>${s.reason}</b></div>
+      <div class="muted">${s.detail} ${s.action}</div>`;
+  } else {
+    const top = Object.entries(attr).sort((a, b) => b[1] - a[1]).filter(([, a]) => a >= .4).map(([l]) => l);
+    body += `<div class="strip"><span class="chip bg-${c.key} k-${c.key}" style="font-size:16px">${c.text}</span>
+      <span class="chip">P(OMI) ${pct(s.p)}%</span>
+      <span class="chip"><span class="dot" style="background:${qualityColor(s.q)}"></span>${qualityWord(s.q)} signal</span></div>`;
+    body += `<div class="muted" style="font-size:13.5px">${top.length ? `Tinted leads drove the call: <b style="color:var(--ink)">${top.join(", ")}</b>` : "No lead stood out."}${(s.noisy||[]).length ? ` Hatched leads are noisy.` : ""}</div>`;
+    if (c.key === "omi") body += `<div class="card"><div class="label">Culprit vessel</div>
+      ${vesselsSorted(s).map(([n, p]) => `<div class="vrow"><b style="color:${VCOL[n]}">${n}</b><div class="vbar"><i style="width:${p*100}%;background:${VCOL[n]}"></i></div><span>${pct(p)}%</span></div>`).join("")}</div>`;
+  }
+  return appbar("Reading") + `<div class="content">${body}</div>` + footer(s);
+}
+
+// ---------- Variant D: report readout ----------
+function renderD(s) {
+  const c = callOf(s), pad = (k) => k.padEnd(12);
+  let L = [`<span class="h">DELMIR reading</span>`, `${pad("Source")}Photo · 21 Oct 2026 14:32`, `${pad("Models")}classifier omi-0.3.1`, `${pad("")}digitizer dg-0.2.0`, ""];
+  if (s.declined) {
+    L.push(`${pad("Call")}<b class="k-dec">DECLINED</b>`, `${pad("Reason")}${s.reason}`, `${pad("")}${s.detail.replace(/(.{1,30})(\s|$)/g, "$1\n" + " ".repeat(12)).trim()}`, `${pad("P(OMI)")}— not computed`);
+  } else {
+    const thr = state.call === 3 ? `out <${RULE_OUT} · in ≥${RULE_IN}` : `≥${RULE_IN}`;
+    L.push(`${pad("P(OMI)")}<b>${s.p.toFixed(2)}</b>  (${s.ci[0].toFixed(2)}–${s.ci[1].toFixed(2)})`,
+      `${pad("Call")}<b class="k-${c.key}">${c.text.toUpperCase()}</b>`, `${pad("")}<span class="muted">${thr}</span>`, "");
+    const vs = vesselsSorted(s);
+    L.push(`${pad("Culprit")}${c.key === "omi" ? "" : `<span class="muted">(if OMI)</span>`}`);
+    vs.forEach(([n, p]) => L.push(`${pad("  " + n)}${p.toFixed(2)} ${"█".repeat(Math.round(p * 16))}`));
+    L.push("", `${pad("Quality")}${s.q.toFixed(2)}  ${qualityWord(s.q).toLowerCase()}`);
+    if (s.q < .8) L.push(`${pad("")}${s.qNote.replace(/^\w+: /, "")}`);
+    const top = Object.entries(s.attr || {}).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([l]) => l);
+    L.push(`${pad("Top leads")}${top.length ? top.join(" ") : "—"}`);
+  }
+  const body = `<div class="readout">${L.join("\n")}</div>
+    <div class="muted" style="font-size:12.5px">Tap a line to copy it. Long-press the screen to share a screenshot.</div>`;
+  return appbar("Reading") + `<div class="content">${body}</div>` + footer(s);
+}
+
+// ---------- notes + switcher ----------
+function renderNotes() {
+  const v = VARIANTS[state.variant], s = SCENARIOS[state.scenario];
+  document.getElementById("notes").innerHTML = `
+    <div class="q"><b>Ticket #6.</b> React to each variant across the scenarios. Steal parts freely: “the banner from A with the lead tint from C” is a great answer.</div>
+    <h2>Variant ${state.variant} · ${v.name}</h2><div>${v.idea}</div>
+    <h2>What it asks of the model</h2><ul>${v.asks.map(a => `<li>${a}</li>`).join("")}</ul>
+    <h2>Scenario · ${s.name}</h2>
+    <div class="muted">${s.declined ? `Declined: ${s.reason}` : `P(OMI) ${s.p} (${s.ci.join("–")}), quality ${s.q}, vessels ${Object.entries(s.v).map(([n,p]) => `${n} ${p}`).join(", ")}`}</div>
+    <h2>Questions to settle</h2><ul>
+      <li>Number, call, or both? Which one leads?</li>
+      <li>Two-way call, or a three-way call with an indeterminate band? (toggle <b>C</b>)</li>
+      <li>Show uncertainty? As an interval, a confidence word, or not at all?</li>
+      <li>Signal quality: a word, a score, per-lead hatching?</li>
+      <li>Culprit vessel: only on an OMI call, or always (faded)? When is it “unclear”?</li>
+      <li>Declined ECG: what does it show, and is the reason enough?</li>
+      <li>Lead attribution: worth showing?</li>
+      <li>Thresholds here (${RULE_OUT}, ${RULE_IN}) are placeholders only.</li></ul>`;
+}
+function renderSwitcher() {
+  const keys = Object.keys(VARIANTS);
+  document.getElementById("switcher").innerHTML = `
+    <button id="prev" title="Previous variant (←)">◀</button>
+    <span class="lbl">${state.variant} · ${VARIANTS[state.variant].name}</span>
+    <button id="next" title="Next variant (→)">▶</button>
+    <select id="scn" title="Scenario (↑ ↓)">${Object.entries(SCENARIOS).map(([k, s]) => `<option value="${k}" ${k === state.scenario ? "selected" : ""}>${s.name}</option>`).join("")}</select>
+    <button id="call" title="Toggle call (C)">${state.call}-way call</button>`;
+  const cyc = d => keys[(keys.indexOf(state.variant) + d + keys.length) % keys.length];
+  document.getElementById("prev").onclick = () => setState({ variant: cyc(-1) });
+  document.getElementById("next").onclick = () => setState({ variant: cyc(1) });
+  document.getElementById("scn").onchange = e => setState({ scenario: e.target.value });
+  document.getElementById("call").onclick = () => setState({ call: state.call === 3 ? 2 : 3 });
+}
+function render() {
+  document.getElementById("phone").innerHTML = VARIANTS[state.variant].render(SCENARIOS[state.scenario]);
+  renderNotes(); renderSwitcher();
+}
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input, textarea, select, [contenteditable]")) return;
+  const vk = Object.keys(VARIANTS), sk = Object.keys(SCENARIOS);
+  const cyc = (arr, cur, d) => arr[(arr.indexOf(cur) + d + arr.length) % arr.length];
+  if (e.key === "ArrowRight") setState({ variant: cyc(vk, state.variant, 1) });
+  else if (e.key === "ArrowLeft") setState({ variant: cyc(vk, state.variant, -1) });
+  else if (e.key === "ArrowDown") { e.preventDefault(); setState({ scenario: cyc(sk, state.scenario, 1) }); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); setState({ scenario: cyc(sk, state.scenario, -1) }); }
+  else if (e.key.toLowerCase() === "c") setState({ call: state.call === 3 ? 2 : 3 });
+});
+render();
+</script>
+</body>
+</html>
