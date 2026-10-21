@@ -1,0 +1,12 @@
+--design B --fs 100 --seed 0 --threads 4
+--design A --fs 100 --seed 0 --threads 4
+--design S --fs 100 --seed 0 --threads 4
+--design C --fs 100 --seed 0 --threads 4
+--design B --fs 100 --seed 1 --threads 4
+--design A --fs 100 --seed 1 --threads 4
+--design S --fs 100 --seed 1 --threads 4
+--design C --fs 100 --seed 1 --threads 4
+--design B --fs 100 --seed 2 --threads 4
+--design A --fs 100 --seed 2 --threads 4
+--design S --fs 100 --seed 2 --threads 4
+--design C --fs 100 --seed 2 --threads 4

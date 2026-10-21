@@ -1,0 +1,17 @@
+# ECGFounder fine-tunes (500 Hz native), 10 epochs, bs 64, max lr 1e-3
+--design A --fs 500 --init ecgfounder --seed 0 --threads 4 --epochs 10 --bs 64
+--design S --fs 500 --init ecgfounder --seed 0 --threads 4 --epochs 10 --bs 64
+--design C --fs 500 --init ecgfounder --seed 0 --threads 4 --epochs 10 --bs 64
+--design A --fs 500 --init ecgfounder --seed 1 --threads 4 --epochs 10 --bs 64
+--design S --fs 500 --init ecgfounder --seed 1 --threads 4 --epochs 10 --bs 64
+--design C --fs 500 --init ecgfounder --seed 1 --threads 4 --epochs 10 --bs 64
+--design A --fs 500 --init ecgfounder --seed 2 --threads 4 --epochs 10 --bs 64
+--design S --fs 500 --init ecgfounder --seed 2 --threads 4 --epochs 10 --bs 64
+--design C --fs 500 --init ecgfounder --seed 2 --threads 4 --epochs 10 --bs 64
+# from scratch at 500 Hz, kernels x5 (A and B do not fit the CPU budget)
+--design S --fs 500 --seed 0 --threads 4
+--design C --fs 500 --seed 0 --threads 4
+--design S --fs 500 --seed 1 --threads 4
+--design C --fs 500 --seed 1 --threads 4
+--design S --fs 500 --seed 2 --threads 4
+--design C --fs 500 --seed 2 --threads 4
