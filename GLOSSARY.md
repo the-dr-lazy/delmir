@@ -74,3 +74,29 @@ _Avoid_: backup, sync, dump
 **Admin**:
 A DELMIR user allowed to save cases, add follow-up and make case exports. For now, the only user.
 _Avoid_: owner, superuser
+
+### Presenting a reading
+
+**P(OMI)**:
+The model's calibrated probability that an ECG shows an OMI.
+_Avoid_: score, risk, OMI likelihood
+
+**Call**:
+The verdict DELMIR gives for an ECG it reads, set by where its P(OMI) falls against a rule-out and a rule-in threshold: OMI, Indeterminate or Not-OMI.
+_Avoid_: diagnosis, prediction, classification
+
+**Indeterminate**:
+The call for a P(OMI) between the rule-out and rule-in thresholds, where DELMIR claims neither OMI nor Not-OMI.
+_Avoid_: borderline, equivocal, grey zone
+
+**Confidence**:
+How far to trust one ECG's P(OMI), given as High, Moderate or Low from the model's own uncertainty and the signal quality.
+_Avoid_: certainty, confidence interval
+
+**Signal quality**:
+How cleanly each lead, and the ECG as a whole, was recorded and digitized.
+_Avoid_: image quality, noise level
+
+**Lead attribution**:
+How much each lead drove an ECG's P(OMI).
+_Avoid_: saliency, heatmap, explanation
