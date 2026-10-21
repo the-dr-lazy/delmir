@@ -26,6 +26,32 @@ _Avoid_: STEMI (as a label)
 An OMI whose ECG does not meet STEMI criteria.
 _Avoid_: occult OMI, NSTEMI-OMI
 
+**OMI mimic**:
+A Not-OMI ECG whose findings resemble an OMI, such as LVH with strain, early repolarization, pericarditis or hyperkalaemia. Read like any other ECG, never declined.
+_Avoid_: false positive, pseudo-STEMI
+
+### Readings
+
+**Intended use**:
+One 12-lead ECG, recorded with standard lead placement, from an adult with suspected ACS: the population DELMIR's readings are meant for and validated on.
+_Avoid_: indication, scope
+
+**Reading**:
+What DELMIR reports for one ECG: its P(OMI), culprit vessel and caveats when it reads the ECG, or only the decline reasons for a declined ECG.
+_Avoid_: result, prediction, output
+
+**Caveat**:
+A named reason a reading is less reliable, shown alongside its P(OMI).
+_Avoid_: warning, flag
+
+**Declined ECG**:
+An ECG outside DELMIR's intended use, whose reading gives decline reasons and never a P(OMI) or culprit vessel.
+_Avoid_: rejected, invalid, unreadable ECG
+
+**Intended-use screen**:
+The check before the classifier that finds what a tracing shows outside DELMIR's intended use and returns its decline reasons and caveats.
+_Avoid_: gate, filter, quality check
+
 ### Anatomy
 
 **Culprit vessel**:
@@ -56,7 +82,7 @@ _Avoid_: blog dataset, validation set
 ### Cases
 
 **Case**:
-One ECG of one patient saved in DELMIR, together with the model's outputs for it and its follow-up.
+One ECG of one patient saved in DELMIR, together with its reading and its follow-up.
 _Avoid_: record, study, encounter
 
 **Follow-up**:
