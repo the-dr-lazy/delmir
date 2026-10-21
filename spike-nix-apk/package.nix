@@ -113,6 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     export ANDROID_USER_HOME=$TMPDIR/android-user-home
     mkdir -p $ANDROID_USER_HOME
     printf 'sdk.dir=%s\ncmake.dir=%s\n' ${sdk} ${sdk}/cmake/3.22.1 > android/local.properties
+    # onnxruntime-react-native 1.24.3 calls org.gradle.util.VersionNumber, which Gradle 9
+    # removed; the guarded branch is for RN < 0.71 only, so disable it.
+    substituteInPlace node_modules/onnxruntime-react-native/android/build.gradle \
+      --replace-fail 'if (VersionNumber.parse(REACT_NATIVE_VERSION) < VersionNumber.parse("0.71")) {' 'if (false) {'
   '';
 
   installPhase = ''

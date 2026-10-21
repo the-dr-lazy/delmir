@@ -19,3 +19,11 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// SPIKE: onnxruntime-react-native asks for onnxruntime-android:latest.integration@aar;
+// pin the native runtime to the JS package's version.
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.force("com.microsoft.onnxruntime:onnxruntime-android:1.24.3")
+    }
+}
