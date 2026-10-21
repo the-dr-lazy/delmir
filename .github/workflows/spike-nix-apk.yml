@@ -24,22 +24,20 @@ jobs:
           t2=$(date +%s)
           echo "eval_and_build_script_seconds=$((t1-t0)) update_script_seconds=$((t2-t1))"
           ls -l spike-nix-apk/deps.json
+          # Stability: does a fresh recording on a different runner equal the committed lockfile?
           git diff --stat
+          git diff --quiet -- spike-nix-apk/deps.json && echo "deps_json_stable=yes" || echo "deps_json_stable=no"
+          git diff -- spike-nix-apk/deps.json | head -100
       - uses: actions/upload-artifact@v4
         with:
           name: deps-json
           path: spike-nix-apk/deps.json
 
   cold-build:
-    needs: lockfile
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: deps-json
-          path: spike-nix-apk
       - run: nproc; free -m; df -BM /
       - uses: cachix/install-nix-action@v31
       - run: df -BM /
@@ -67,3 +65,8 @@ jobs:
           ls -l result/ || true
           nix path-info -S ./spike-nix-apk#apk.mitmCache ./spike-nix-apk#apk.androidsdk || true
           du -sh /nix/store
+      - name: Reproducibility (nix build --rebuild)
+        run: |
+          t0=$(date +%s)
+          nix build ./spike-nix-apk#apk --rebuild -L > rebuild.log 2>&1 && echo "apk_bit_reproducible=yes" || { tail -n 30 rebuild.log; echo "apk_bit_reproducible=no"; }
+          echo "rebuild_seconds=$(( $(date +%s)-t0 ))"
