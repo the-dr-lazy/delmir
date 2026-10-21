@@ -62,6 +62,16 @@ _Avoid_: culprit artery, infarct territory
 The region of myocardium an ECG localises an infarct to, such as anterior, inferior, lateral or posterior. Says where, not which artery.
 _Avoid_: culprit, vessel
 
+### Inputs
+
+**ECG image**:
+A picture of an ECG, such as a phone photo, a scan, a PDF or a screenshot, whose signal has to be recovered by digitizing it.
+_Avoid_: printout, ECG photo (for any picture)
+
+**ECG file**:
+A file that stores an ECG's sample values in machine-readable form, such as WFDB, DICOM-ECG or a vendor XML. A PDF is never an ECG file, even when its traces are vector paths.
+_Avoid_: digital ECG, ECG export
+
 ### Labels and data
 
 **Proxy label**:
