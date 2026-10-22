@@ -26,6 +26,10 @@ _Avoid_: STEMI (as a label)
 An OMI whose ECG does not meet STEMI criteria.
 _Avoid_: occult OMI, NSTEMI-OMI
 
+**Reperfused OMI**:
+An OMI whose culprit lesion had reopened to TIMI 2 or 3 flow by angiography, recognised by a very high troponin or a new regional wall-motion abnormality.
+_Avoid_: transient OMI, open-artery OMI
+
 **OMI mimic**:
 A Not-OMI ECG whose findings resemble an OMI, such as LVH with strain, early repolarization, pericarditis or hyperkalaemia. Read like any other ECG, never declined.
 _Avoid_: false positive, pseudo-STEMI
@@ -79,12 +83,24 @@ _Avoid_: digital ECG, ECG export
 ### Labels and data
 
 **Proxy label**:
-A label inferred by rule from a different concept than the one it stands for, such as a culprit vessel inferred from an infarct territory. Always marked as a proxy, and superseded by an angiography-confirmed label when one exists.
+A label inferred by rule from a different concept than the one it stands for, such as a culprit vessel inferred from an infarct territory. Always marked as a proxy, and superseded by an angiography-confirmed or clinical label when one exists.
 _Avoid_: weak label, silver label
 
 **Angiography-confirmed label**:
-A label taken from the patient's coronary angiography and troponin course: the reference standard that proxy labels stand in for.
+A label decided by the culprit finding of the patient's coronary angiography, with the troponin course where the culprit's flow alone does not decide: the reference standard that proxy labels stand in for.
 _Avoid_: real label, ground truth
+
+**Clinical label**:
+A label decided without an angiographic culprit finding, from the troponin course, regional wall motion and the final diagnosis, such as a Not-OMI from a troponin rule-out.
+_Avoid_: troponin label, soft label
+
+**Undetermined**:
+What a case's label is when its follow-up cannot decide between OMI and Not-OMI; such a case is left out of training and evaluation, never counted as Not-OMI.
+_Avoid_: unknown, Indeterminate (a call, not a label), excluded
+
+**Very high troponin**:
+A peak troponin at or above the level that marks an infarct large enough to be an OMI for its assay: 1.0 ng/mL for conventional cTnT, 10 ng/mL for conventional cTnI, 1000 ng/L for hs-cTnT and 5000 ng/L for hs-cTnI. A qualitative troponin test never shows one.
+_Avoid_: high troponin, large troponin leak
 
 **Prior ECG**:
 An earlier ECG of the same patient, available for comparison with the current one.
@@ -99,8 +115,12 @@ _Avoid_: blog dataset, validation set
 One ECG of one patient saved in DELMIR, together with its reading and its follow-up.
 _Avoid_: record, study, encounter
 
+**Episode**:
+One presentation of a patient with suspected ACS, from symptom onset to discharge. Its follow-up gives the label of the episode's ECGs recorded before angiography, never of those recorded after it.
+_Avoid_: encounter, admission, event
+
 **Follow-up**:
-The angiography and troponin findings added to a case after its ECG, such as the culprit vessel, TIMI flow, lesion location and peak troponin.
+The angiography, troponin and imaging findings of the episode a case's ECG belongs to, such as the culprit lesions, their TIMI flow, peak troponin, regional wall motion and the final diagnosis.
 _Avoid_: outcome, result
 
 **Case registry**:
