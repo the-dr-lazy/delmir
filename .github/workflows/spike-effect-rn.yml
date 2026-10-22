@@ -14,9 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v31
-      - name: Record deps.json and deps-op18.json
+      - name: Record deps.json
         run: |
-          for v in apk apk-op18; do
+          for v in apk; do
             nix build ./spike-effect-rn#$v.mitmCache.updateScript --out-link us-$v
             for i in 1 2 3; do
               # Ubuntu 24.04 blocks unprivileged user namespaces, so no bwrap.
