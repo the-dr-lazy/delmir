@@ -78,6 +78,9 @@ def build_model():
 
 
 model = build_model()
+dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # ROCm builds expose the GPU as cuda
+model.to(dev)
+print("device:", dev, torch.cuda.get_device_name(0) if dev.type == "cuda" else "", flush=True)
 n_params = sum(t.numel() for t in model.parameters())
 is_ef = a.init == "ecgfounder"
 # For ECGFounder arms A is the 12-channel masked canvas only (its first conv takes 12 channels).
@@ -85,6 +88,7 @@ design = DESIGNS[a.design]
 
 
 def forward(x, present):
+    x, present = x.to(dev, non_blocking=True), present.to(dev)
     if a.design == "B":
         s, pr = design(x, present)
         return model(s, pr)
@@ -110,7 +114,7 @@ def predict(idx):
             out.append(torch.stack(ps).amax(0))
         else:
             out.append(torch.sigmoid(forward(x, present)))
-    return torch.cat(out).numpy()
+    return torch.cat(out).cpu().numpy()
 
 
 lr = a.lr or (1e-3 if is_ef else 1e-2)
@@ -123,7 +127,7 @@ Yn = df[TARGETS].values
 best, best_state, best_ep, log, start = -1, None, -1, [], 0
 ckpt = os.path.join(a.runs, name + ".ckpt")
 if os.path.exists(ckpt):  # resume after a kill (the shared host OOM-kills under memory pressure)
-    c = torch.load(ckpt, weights_only=False)
+    c = torch.load(ckpt, map_location="cpu", weights_only=False)
     model.load_state_dict(c["model"])
     opt.load_state_dict(c["opt"])
     sched.load_state_dict(c["sched"])
@@ -145,7 +149,7 @@ for ep in range(start, a.epochs):
         else:  # same 3x4 layout over a circularly shifted record: new beats, same plot geometry
             x = roll(x, torch.randint(0, T, (B,), generator=gen))
         present = lead_dropout(B, gen)
-        loss = loss_fn(forward(x, present), Y[idx])
+        loss = loss_fn(forward(x, present), Y[idx].to(dev))
         opt.zero_grad()
         loss.backward()
         opt.step()
