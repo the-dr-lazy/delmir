@@ -15,13 +15,14 @@ const casesAtom = runtime.atom(listCases);
 const caseAtom = Atom.family((id: string) => runtime.atom(getCase(id)));
 
 const command = runtime.fn((url: string) => {
-  const u = new URL(url);
-  const op = u.hostname;
-  const n = (k: string, d: number) => Number(u.searchParams.get(k) ?? d);
-  log('command', { url, runner: runnerName() });
+  // React Native's URL has no hostname/searchParams for a custom scheme, so parse by hand.
+  const [op, query = ''] = url.replace(/^delmirspike:\/\//, '').split('?');
+  const params = Object.fromEntries(query.split('&').filter(Boolean).map(kv => kv.split('=')));
+  const n = (k: string, d: number) => Number(params[k] ?? d);
+  log('command', { url, op, params, runner: runnerName() });
   const run =
     op === 'seed' ? seed(n('n', 1000))
-    : op === 'bench' ? bench(u.searchParams.get('mode') === 'async' ? 'async' : 'sync', n('runs', 20))
+    : op === 'bench' ? bench(params.mode === 'async' ? 'async' : 'sync', n('runs', 20))
     : op === 'checks' ? checks
     : op === 'cipher' ? cipherProbe
     : op === 'migrations' ? migrationsCheck
