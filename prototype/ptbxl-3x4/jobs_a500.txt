@@ -1,0 +1,1 @@
+--design A --fs 500 --seed 0 --threads 4

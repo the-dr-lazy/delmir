@@ -79,6 +79,8 @@ def build_model():
 
 model = build_model()
 dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # ROCm builds expose the GPU as cuda
+if os.environ.get("DELMIR_NO_MIOPEN"):  # the ROCm wheel cannot JIT some MIOpen BatchNorm kernels (A at 500 Hz)
+    torch.backends.cudnn.enabled = False
 model.to(dev)
 print("device:", dev, torch.cuda.get_device_name(0) if dev.type == "cuda" else "", flush=True)
 n_params = sum(t.numel() for t in model.parameters())
