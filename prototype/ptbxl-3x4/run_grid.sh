@@ -18,7 +18,7 @@ worker() {
     [ -s "runs/$n.json" ] && continue
     mkdir "runs/.claim/$n" 2>/dev/null || continue
     for try in 1 2 3 4 5 6; do
-      .venv/bin/python train.py $line >> "logs/$(echo "$line" | tr -c 'a-zA-Z0-9\n' _).log" 2>&1 && break
+      ${PY:-.venv/bin/python} train.py $line >> "logs/$(echo "$line" | tr -c 'a-zA-Z0-9\n' _).log" 2>&1 && break
       echo "exit $? (try $try)" >> "logs/$(echo "$line" | tr -c 'a-zA-Z0-9\n' _).log"
       sleep 60
     done
