@@ -51,6 +51,10 @@ for ck in sys.argv[1:]:
                 out.append(torch.sigmoid(f(*design_input(design, init, x, pr))))
     cpu = torch.cat(out).numpy()
     gpu = np.load(ck[:-3] + ".npz")["test"]
+    np.save(ck[:-3] + ".cpu_test.npy", cpu)
     a_g, a_c = task_aucs(Y, gpu, hs), task_aucs(Y, cpu, hs)
+    bad = np.abs(gpu - cpu).max(1) > 1e-3
+    rows = np.where(bad)[0]
     print(f"| {name} | {np.abs(gpu - cpu).max():.1e} | {np.mean([a_g[t] for t in TASKS]):.4f} | "
-          f"{np.mean([a_c[t] for t in TASKS]):.4f} |", flush=True)
+          f"{np.mean([a_c[t] for t in TASKS]):.4f} | {bad.sum()}/{len(bad)} records off; "
+          f"rows {rows.min() if len(rows) else '-'}..{rows.max() if len(rows) else '-'} |", flush=True)

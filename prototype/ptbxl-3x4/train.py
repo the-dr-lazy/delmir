@@ -106,15 +106,19 @@ def batch(idx):
 def predict(idx):
     model.eval()
     out = []
-    pbs = 64 if a.design == "B" else 256  # B's per-lead eval segfaults instead of raising OOM on a shared 8 GB GPU
+    pbs = 64 if a.design == "B" else 256
     for i in range(0, len(idx), pbs):
         x, _ = batch(idx[i:i + pbs])
-        present = torch.ones(x.shape[0], 12, dtype=torch.bool)
+        n = x.shape[0]
+        # ROCm 7.2 on the RX 6600 XT returns garbage for some odd batch shapes (the last, partial
+        # batch); pad every batch to the full size and drop the padding.
+        x = torch.cat([x, x.new_zeros(pbs - n, *x.shape[1:])])
+        present = torch.ones(pbs, 12, dtype=torch.bool)
         if a.design == "S":  # benchmark: 2.5 s windows, stride half a window, max over windows
             ps = [torch.sigmoid(forward(x[:, :, s:s + w], present)) for s in range(0, T - w + 1, w // 2)]
-            out.append(torch.stack(ps).amax(0))
+            out.append(torch.stack(ps).amax(0)[:n])
         else:
-            out.append(torch.sigmoid(forward(x, present)))
+            out.append(torch.sigmoid(forward(x, present))[:n])
     return torch.cat(out).cpu().numpy()
 
 

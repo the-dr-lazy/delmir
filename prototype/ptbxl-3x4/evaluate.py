@@ -32,7 +32,9 @@ meta = {}
 for f in sorted(glob.glob(os.path.join(runs, "*.json"))):
     r = json.load(open(f))
     arm = r["name"].rsplit("_s", 1)[0]
-    arms[arm].append(np.load(f[:-5] + ".npz")["test"])
+    # GPU-trained runs: use the CPU recomputation from the saved weights (verify_cpu.py), not the GPU's
+    cpu = f[:-5] + ".cpu_test.npy"
+    arms[arm].append(np.load(cpu) if os.path.exists(cpu) else np.load(f[:-5] + ".npz")["test"])
     meta.setdefault(arm, []).append(r)
 
 
