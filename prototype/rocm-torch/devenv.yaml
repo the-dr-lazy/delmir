@@ -1,0 +1,4 @@
+# PROTOTYPE for #41, throwaway: same nixpkgs pin as #8's findings.
+inputs:
+  nixpkgs:
+    url: github:NixOS/nixpkgs/5adc50831c259f87faeb09ddf930d43597197473

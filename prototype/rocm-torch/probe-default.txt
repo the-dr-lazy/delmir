@@ -1,0 +1,9 @@
+env: {'HSA_OVERRIDE_GFX_VERSION': '10.3.0', 'HSA_OVERRIDE_GFX_VERSION_1': '10.3.0', 'HSA_OVERRIDE_GFX_VERSION_2': None, 'ROCR_VISIBLE_DEVICES': '0', 'HIP_VISIBLE_DEVICES': None}
+torch 2.13.0 hip 7.2.53211
+is_available True device_count 1
+  cuda:0 AMD Radeon RX 6600 XT gfx1030 8.0 GiB CUs 16
+cuda:0 matmul fp32 TFLOP/s: 8.61
+cuda:0 matmul fp16 TFLOP/s: 16.63
+cuda:0 conv1d (32, 64, 4994) first 2566 ms, second 1.4 ms
+cuda:0 conv1d max |gpu - cpu|: 1.43e-06
+devenv shell -- python probe.py  15.12s user 2.14s system 93% cpu 18.490 total

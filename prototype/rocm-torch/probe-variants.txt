@@ -1,0 +1,35 @@
+=== A per-node only, ROCR=0
+env: {'HSA_OVERRIDE_GFX_VERSION': None, 'HSA_OVERRIDE_GFX_VERSION_1': '10.3.0', 'HSA_OVERRIDE_GFX_VERSION_2': None, 'ROCR_VISIBLE_DEVICES': '0', 'HIP_VISIBLE_DEVICES': None}
+torch 2.13.0 hip 7.2.53211
+is_available True device_count 1
+  cuda:0 AMD Radeon RX 6600 XT gfx1030 8.0 GiB CUs 16
+cuda:0 matmul fp32 TFLOP/s: 7.22
+cuda:0 matmul fp16 TFLOP/s: 16.63
+cuda:0 conv1d (32, 64, 4994) first 132 ms, second 1.4 ms
+cuda:0 conv1d max |gpu - cpu|: 1.43e-06
+=== B per-node only, ROCR unset
+LLVM ERROR: CachedFileStream was not committed.
+timeout: the monitored command dumped core
+=== C global only, ROCR unset
+env: {'HSA_OVERRIDE_GFX_VERSION': '10.3.0', 'HSA_OVERRIDE_GFX_VERSION_1': None, 'HSA_OVERRIDE_GFX_VERSION_2': None, 'ROCR_VISIBLE_DEVICES': None, 'HIP_VISIBLE_DEVICES': None}
+torch 2.13.0 hip 7.2.53211
+is_available True device_count 2
+  cuda:0 AMD Radeon RX 6600 XT gfx1030 8.0 GiB CUs 16
+  cuda:1 AMD Ryzen 9 7950X3D 16-Core Processor gfx1030 15.2 GiB CUs 1
+cuda:0 matmul fp32 TFLOP/s: 8.70
+cuda:0 matmul fp16 TFLOP/s: 16.58
+cuda:0 conv1d (32, 64, 4994) first 125 ms, second 1.4 ms
+cuda:0 conv1d max |gpu - cpu|: 1.67e-06
+cuda:1 matmul fp32 TFLOP/s: 29.50
+cuda:1 matmul fp16 TFLOP/s: 50.15
+cuda:1 conv1d (32, 64, 4994) first 2911 ms, second 0.5 ms
+cuda:1 conv1d max |gpu - cpu|: 5.34e-05
+=== D no override, ROCR=0
+env: {'HSA_OVERRIDE_GFX_VERSION': None, 'HSA_OVERRIDE_GFX_VERSION_1': None, 'HSA_OVERRIDE_GFX_VERSION_2': None, 'ROCR_VISIBLE_DEVICES': '0', 'HIP_VISIBLE_DEVICES': None}
+torch 2.13.0 hip 7.2.53211
+is_available True device_count 1
+  cuda:0 AMD Radeon RX 6600 XT gfx1032 8.0 GiB CUs 16
+cuda:0 matmul fp32 TFLOP/s: 7.61
+cuda:0 matmul fp16 TFLOP/s: 13.48
+cuda:0 conv1d (32, 64, 4994) first 135 ms, second 3.1 ms
+cuda:0 conv1d max |gpu - cpu|: 1.43e-06

@@ -1,0 +1,51 @@
+=== GPU fp32, per-node override, 120 s
+params 922116
+step 1 loss 1.8547 elapsed 24.4s
+step 50 loss 0.0825 elapsed 31.4s
+step 100 loss 0.0258 elapsed 38.2s
+step 150 loss 0.0145 elapsed 44.9s
+step 200 loss 0.0079 elapsed 51.6s
+step 250 loss 0.0060 elapsed 58.3s
+step 300 loss 0.0041 elapsed 65.1s
+step 350 loss 0.0028 elapsed 72.0s
+step 400 loss 0.0020 elapsed 78.8s
+step 450 loss 0.0015 elapsed 85.7s
+step 500 loss 0.0012 elapsed 92.6s
+step 550 loss 0.0010 elapsed 99.5s
+step 600 loss 0.0012 elapsed 106.3s
+step 650 loss 0.0007 elapsed 113.1s
+step 700 loss 0.0011 elapsed 119.8s
+RESULT device=cuda amp=False bs=256 steps=702 seconds=120.1 samples/s=1496 final_loss=0.0008 omi_acc=1.000 vessel_acc=1.000 peak_mem=0.49GiB
+=== GPU fp16 autocast, per-node override, 60 s
+params 922116
+step 1 loss 1.8547 elapsed 26.2s
+step 50 loss 0.0851 elapsed 30.9s
+step 100 loss 0.0263 elapsed 35.8s
+step 150 loss 0.0137 elapsed 40.5s
+step 200 loss 0.0070 elapsed 45.3s
+step 250 loss 0.0052 elapsed 50.1s
+step 300 loss 0.0034 elapsed 54.9s
+step 350 loss 0.0026 elapsed 59.6s
+RESULT device=cuda amp=True bs=256 steps=355 seconds=60.1 samples/s=1513 final_loss=0.0029 omi_acc=1.000 vessel_acc=1.000 peak_mem=0.49GiB
+=== GPU fp32, no override, 60 s
+params 922116
+step 1 loss 1.8547 elapsed 3.1s
+step 50 loss 0.0825 elapsed 9.7s
+step 100 loss 0.0258 elapsed 16.4s
+step 150 loss 0.0145 elapsed 23.2s
+step 200 loss 0.0079 elapsed 29.9s
+step 250 loss 0.0060 elapsed 36.5s
+step 300 loss 0.0041 elapsed 43.2s
+step 350 loss 0.0028 elapsed 49.9s
+step 400 loss 0.0020 elapsed 56.6s
+Failed to write segment data to pipe: Broken pipe
+GPU coredump: handler exited with error (status: 1)
+GPU core dump failed
+:0:rocdevice.cpp            :3723: 72063201281 us:  Callback: Queue 0x750d8c600000 aborting with error : HSA_STATUS_ERROR_EXCEPTION: An HSAIL operation resulted in a hardware exception. code: 0x1016
+=== CPU fp32 (32 threads), 60 s
+params 922116
+step 1 loss 1.8745 elapsed 0.4s
+step 50 loss 0.0765 elapsed 16.6s
+step 100 loss 0.0245 elapsed 35.7s
+step 150 loss 0.0131 elapsed 52.1s
+RESULT device=cpu amp=False bs=256 steps=176 seconds=60.4 samples/s=745 final_loss=0.0100 omi_acc=1.000 vessel_acc=1.000
