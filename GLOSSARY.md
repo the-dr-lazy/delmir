@@ -120,7 +120,7 @@ _Avoid_: presenting ECG, first ECG, quiz ECG
 ### Cases
 
 **Case**:
-One ECG of one patient saved in DELMIR, together with its reading and its follow-up.
+One ECG image of one patient saved in DELMIR, with the reading it got when it was saved; it belongs to an episode and shares that episode's follow-up.
 _Avoid_: record, study, encounter
 
 **Episode**:
@@ -136,8 +136,16 @@ The saved cases on the phone, and the source of DELMIR's own angiography-confirm
 _Avoid_: database, dataset
 
 **Case export**:
-A file of cases deliberately saved out of the case registry; the only way cases leave the phone.
+A file of cases deliberately saved out of the case registry, carrying everything the registry holds about them, record numbers and ECG images included; the only way cases leave the phone.
 _Avoid_: backup, sync, dump
+
+**Record number**:
+The hospital's identifier for a patient, typed in by the admin so the follow-up can be found later; the only identifier DELMIR stores apart from what an ECG image shows.
+_Avoid_: MRN, patient ID, file number
+
+**Cardiac history**:
+Whether a patient had a prior MI, a prior PCI or a prior CABG, as known at an episode.
+_Avoid_: risk factors, comorbidities
 
 **Admin**:
 A DELMIR user allowed to save cases, add follow-up and make case exports. For now, the only user.
