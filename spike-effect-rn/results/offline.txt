@@ -1,0 +1,17 @@
+release-migrator-unpatched: metro FAILED: error node_modules/effect/dist/sql/Migrator.js: node_modules/effect/dist/sql/Migrator.js:Invalid call at line 218: import(__rewriteRelativeImportExtension(/* @vite-ignore */
+release-migrator-patched: metro ok, hermesc ok, bytecode 3755785 B
+dev-migrator-patched: metro ok, hermesc ok, bytecode 4872015 B
+release-local-unpatched: metro ok, hermesc ok, bytecode 3732550 B
+release-local-no-import-meta-plugin: metro ok, hermesc FAILED: 'import.meta' is currently unsupported
+dev-local-no-import-meta-plugin: metro ok, hermesc FAILED: 'import.meta' is currently unsupported
+release-baseline: metro ok, hermesc ok, bytecode 1681864 B
+release-arbitrary: metro ok, hermesc ok, bytecode 3914444 B
+minified JS by package (index.js), KiB:
+  effect 852
+  react-native 735
+  @react-navigation/core 98
+  @react-native/virtualized-lists 57
+  react-native-screens 49
+  @react-navigation/elements 40
+  @react-navigation/native 27
+  @react-navigation/routers 20
