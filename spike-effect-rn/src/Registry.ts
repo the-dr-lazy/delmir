@@ -126,7 +126,8 @@ export const bench = (mode: 'sync' | 'async', runs: number) =>
     const sql = yield* SqlClient.SqlClient;
     const query = sql<{ data: string }>`SELECT data FROM cases ORDER BY created_at DESC`;
     const q = mode === 'async' ? SqliteClient.withAsyncQuery(query) : query;
-    yield* Effect.promise(() => new Promise<void>(r => setTimeout(r, 300)));
+    // Commands arrive as a cold start; let startup settle (and device.sh reset gfxinfo) first.
+    yield* Effect.promise(() => new Promise<void>(r => setTimeout(r, 3000)));
     const stop = watchFrames();
     const total: number[] = [], queryMs: number[] = [], decodeMs: number[] = [];
     let count = 0;

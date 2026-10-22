@@ -38,13 +38,22 @@ wait_event() {
 }
 json() { sed 's/^.*SPIKE //'; }
 
-cmd() { # variant url event
-  local v=$1 url=$2 event=$3 t0
+# Each command is a cold start with the link as the launch intent (Linking.getInitialURL): a link
+# sent to the running app never reached JS on the emulator (no `url` event).
+cmd() { # variant url event [before-command hook]
+  local v=$1 url=$2 event=$3 hook=${4:-true} t0
+  adb shell am force-stop $PKG; sleep 1
   t0=$(since)
-  adb shell am start -a android.intent.action.VIEW -d "\"$url\"" $PKG >/dev/null
-  wait_event "$event" "$t0" 300 | json | tee -a "$OUT/$v/events.jsonl"
-  wait_event command-done "$t0" 300 >/dev/null
+  adb shell am start -W -a android.intent.action.VIEW -d "\"$url\"" $PKG >/dev/null
+  $hook
+  if wait_event "$event" "$t0" 300 | json | tee -a "$OUT/$v/events.jsonl" | grep . >/dev/null; then
+    wait_event command-done "$t0" 300 >/dev/null || true
+  else
+    echo "FAILED: $url" | tee -a "$OUT/$v/failures.txt"
+    adb logcat -d -v epoch | awk -v t0="$t0" '$1 > t0' | grep -E 'SPIKE|ReactNativeJS|AndroidRuntime|FATAL' > "$OUT/$v/logcat-$event.txt" || true
+  fi
 }
+gfx_reset() { adb shell dumpsys gfxinfo $PKG reset >/dev/null; }
 
 for v in "${VARIANTS[@]}"; do
   echo "=== $v"
@@ -104,8 +113,7 @@ for v in "${VARIANTS[@]}"; do
   cmd "$v" "delmirspike://migrations" migrations
   cmd "$v" "delmirspike://seed?n=1000" seed
   for mode in sync async; do
-    adb shell dumpsys gfxinfo $PKG reset >/dev/null
-    cmd "$v" "delmirspike://bench?mode=$mode&runs=20" bench
+    cmd "$v" "delmirspike://bench?mode=$mode&runs=20" bench gfx_reset
     adb shell dumpsys gfxinfo $PKG | grep -E 'Total frames rendered|Janky frames|percentile' > "$OUT/$v/gfxinfo-$mode.txt"
   done
 
@@ -131,5 +139,6 @@ for v in "${VARIANTS[@]}"; do
       echo "--- bmgr backupnow"; adb shell bmgr backupnow $PKG 2>&1 | tr -d '\r'
     } | tee "$OUT/$v/backup-check.txt"
   fi
+  adb logcat -d -v epoch | grep -E 'SPIKE|AndroidRuntime|FATAL' > "$OUT/$v/logcat-last.txt" || true
 done
 echo "done: results in $OUT/"

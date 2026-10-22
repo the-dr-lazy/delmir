@@ -127,6 +127,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-PspikeEntry=${entry}"
     "-x"
     "lint"
+    # lintVital runs on release builds and looks up newer dependency versions in Google Maven's
+    # master-index.xml / group-index.xml, which change with every Google release; recorded into
+    # deps.json they made the lockfile go stale within hours.
+    "-x"
+    "lintVitalRelease"
+    "-x"
+    "lintVitalAnalyzeRelease"
+    "-x"
+    "lintVitalReportRelease"
   ];
 
   env = {

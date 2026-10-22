@@ -52,7 +52,7 @@ function CaseList() {
   useEffect(() => {
     const go = (url: string | null | undefined) => { if (url) runCommand(url).then(refresh, refresh); };
     Linking.getInitialURL().then(go);
-    const sub = Linking.addEventListener('url', e => go(e.url));
+    const sub = Linking.addEventListener('url', e => { log('url-event', { url: e.url }); go(e.url); });
     return () => sub.remove();
   }, [runCommand, refresh]);
   useEffect(() => {

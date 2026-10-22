@@ -3,10 +3,14 @@
 # spike branch. (The local host's network drops mitm-cache and cache.nixos.org fetches.)
 name: spike-effect-rn
 on:
-  push:
-    branches: [claude/elastic-lalande-f3df07]
-    paths: [spike-effect-rn/**, .github/workflows/spike-effect-rn.yml]
   workflow_dispatch:
+    inputs:
+      builds:
+        description: flake outputs to build
+        default: apk apk-op18 apk-local apk-baseline apk-debug apk-x86_64 apk-op18-x86_64 apk-local-x86_64 apk-baseline-x86_64 apk-debug-x86_64 emulator
+      devices:
+        description: variants for device.sh on the emulator
+        default: apk-x86_64 apk-op18-x86_64 apk-local-x86_64 apk-baseline-x86_64 apk-debug-x86_64
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,8 +36,7 @@ jobs:
       - name: Build APK variants and the emulator (sandboxed)
         run: |
           mkdir -p apks
-          for v in apk apk-op18 apk-local apk-baseline apk-debug \
-                   apk-x86_64 apk-op18-x86_64 apk-local-x86_64 apk-baseline-x86_64 apk-debug-x86_64 emulator; do
+          for v in ${{ inputs.builds }}; do
             t0=$(date +%s)
             nix build ./spike-effect-rn#$v -L --out-link result-$v > build-$v.log 2>&1 \
               && echo "$v ok $(( $(date +%s) - t0 )) s" || { tail -n 80 build-$v.log; echo "$v FAILED"; }
@@ -60,7 +63,7 @@ jobs:
           npm ci --no-audit --no-fund && sh patch-migrator.sh node_modules   # Metro for the dev run
           NIX_ANDROID_EMULATOR_FLAGS="-no-window -gpu swiftshader_indirect -no-audio -no-snapshot" ../result-emulator/bin/run-test-emulator
           APK_DIR=$PWD/../apks timeout 5400 nix shell nixpkgs#android-tools nixpkgs#sqlcipher nixpkgs#bc nixpkgs#jdk17_headless -c \
-            ./device.sh apk-x86_64 apk-op18-x86_64 apk-local-x86_64 apk-baseline-x86_64 apk-debug-x86_64
+            ./device.sh ${{ inputs.devices }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
