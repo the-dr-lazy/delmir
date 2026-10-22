@@ -1,4 +1,6 @@
-# GPU queue, priority order: B at 100 Hz (eval in chunks of 64), the rest of S/C 500 Hz, ECGFounder A, then A and B at 500 Hz
+# GPU queue (AMD_SERIALIZE_KERNEL=3): resume S/C 500 s0 and B 100 s0 from checkpoints first
+--design S --fs 500 --seed 0 --threads 4
+--design C --fs 500 --seed 0 --threads 4
 --design B --fs 100 --seed 0 --threads 4 --lr 1e-3
 --design B --fs 100 --seed 1 --threads 4 --lr 1e-3
 --design B --fs 100 --seed 2 --threads 4 --lr 1e-3
