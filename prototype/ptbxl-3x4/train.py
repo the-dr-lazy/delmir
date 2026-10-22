@@ -106,8 +106,9 @@ def batch(idx):
 def predict(idx):
     model.eval()
     out = []
-    for i in range(0, len(idx), 256):
-        x, _ = batch(idx[i:i + 256])
+    pbs = 64 if a.design == "B" else 256  # B's per-lead eval segfaults instead of raising OOM on a shared 8 GB GPU
+    for i in range(0, len(idx), pbs):
+        x, _ = batch(idx[i:i + pbs])
         present = torch.ones(x.shape[0], 12, dtype=torch.bool)
         if a.design == "S":  # benchmark: 2.5 s windows, stride half a window, max over windows
             ps = [torch.sigmoid(forward(x[:, :, s:s + w], present)) for s in range(0, T - w + 1, w // 2)]
