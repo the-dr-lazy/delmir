@@ -1,0 +1,47 @@
+=== rerun at 2500 MHz/-75 mV: GPU fp32, no override, 120 s (04:46:34 UTC)
+params 922116
+step 1 loss 1.8547 elapsed 3.1s
+step 50 loss 0.0825 elapsed 10.1s
+step 100 loss 0.0258 elapsed 17.0s
+step 150 loss 0.0145 elapsed 23.8s
+step 200 loss 0.0079 elapsed 30.7s
+step 250 loss 0.0060 elapsed 37.6s
+step 300 loss 0.0041 elapsed 44.5s
+step 350 loss 0.0028 elapsed 51.4s
+step 400 loss 0.0020 elapsed 58.2s
+step 450 loss 0.0015 elapsed 65.1s
+step 500 loss 0.0012 elapsed 72.0s
+step 550 loss 0.0010 elapsed 78.9s
+step 600 loss 0.0012 elapsed 85.8s
+step 650 loss 0.0007 elapsed 92.6s
+step 700 loss 0.0011 elapsed 99.5s
+step 750 loss 0.0007 elapsed 106.4s
+step 800 loss 0.0006 elapsed 113.3s
+[W1022 08:18:37.228109645 HIPCachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 8522825728 bytes (free: 7616856064, total: 8573157376).
+[W1022 08:18:37.235297154 HIPCachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 8522825728 bytes (free: 7893680128, total: 8573157376).
+Traceback (most recent call last):
+  File "/home/personal/workspaces/delmir/.claude/worktrees/wayfinder-41-rocm-spike-e083f2/prototype/rocm-torch/train.py", line 66, in <module>
+    vacc = (lv[m].argmax(1) == v[m]).float().mean().item()
+            ~~^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 7.94 GiB. GPU 0 has a total capacity of 7.98 GiB of which 7.35 GiB is free. Of the allocated memory 125.00 MiB is allocated by PyTorch, and 17.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+=== rerun at 2500 MHz/-75 mV: GPU fp32, per-node override, 120 s (04:48:37 UTC)
+params 922116
+step 1 loss 1.8547 elapsed 3.0s
+step 50 loss 0.0825 elapsed 9.8s
+step 100 loss 0.0258 elapsed 16.9s
+step 150 loss 0.0145 elapsed 23.7s
+step 200 loss 0.0079 elapsed 30.6s
+step 250 loss 0.0060 elapsed 37.5s
+step 300 loss 0.0041 elapsed 44.4s
+step 350 loss 0.0028 elapsed 51.2s
+step 400 loss 0.0020 elapsed 58.1s
+step 450 loss 0.0015 elapsed 65.0s
+step 500 loss 0.0012 elapsed 71.9s
+step 550 loss 0.0010 elapsed 78.8s
+step 600 loss 0.0012 elapsed 85.6s
+step 650 loss 0.0007 elapsed 92.5s
+step 700 loss 0.0011 elapsed 99.4s
+step 750 loss 0.0007 elapsed 106.3s
+step 800 loss 0.0006 elapsed 113.2s
+step 850 loss 0.0005 elapsed 120.0s
+RESULT device=cuda amp=False bs=256 steps=851 seconds=120.1 samples/s=1814 final_loss=0.0006 omi_acc=1.000 vessel_acc=1.000 peak_mem=0.49GiB
