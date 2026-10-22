@@ -106,8 +106,16 @@ _Avoid_: high troponin, large troponin leak
 An earlier ECG of the same patient, available for comparison with the current one.
 
 **Blog test set**:
-Cases from Dr. Smith's ECG Blog, hand-labelled from the follow-up each post reports, used only to test DELMIR and never to train it.
+The blog cases of Dr. Smith's ECG Blog, used only to test DELMIR and never to train, tune or calibrate it.
 _Avoid_: blog dataset, validation set
+
+**Blog case**:
+One ECG image from a post on Dr. Smith's ECG Blog, labelled from the follow-up facts the post reports, never from the authors' reading of the ECG. Not a case: it is never saved in the case registry.
+_Avoid_: blog post (a post can hold several patients and many ECGs), blog record
+
+**Index ECG**:
+The earliest ECG of an episode that carries the episode's label: the one ECG counted when each episode is counted once.
+_Avoid_: presenting ECG, first ECG, quiz ECG
 
 ### Cases
 
