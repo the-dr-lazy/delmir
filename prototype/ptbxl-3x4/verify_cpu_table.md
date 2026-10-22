@@ -10,3 +10,6 @@
 | C_500_scratch_s1 | 6.0e-07 | 0.9268 | 0.9268 | 0/2198 records off; rows -..- |
 | S_500_scratch_s2 | 9.5e-07 | 0.9354 | 0.9354 | 0/2198 records off; rows -..- |
 | C_500_scratch_s2 | 5.1e-07 | 0.9258 | 0.9258 | 0/2198 records off; rows -..- |
+| A_500_ecgfounder_s1 | 1.0e-06 | 0.9406 | 0.9406 | 0/2198 records off; rows -..- |
+| A_500_ecgfounder_s2 | 8.0e-07 | 0.9444 | 0.9444 | 0/2198 records off; rows -..- |
+| A_500_scratch_s0 | 6.0e-07 | 0.9333 | 0.9333 | 0/2198 records off; rows -..- |

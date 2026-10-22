@@ -9,7 +9,7 @@ PROTOTYPE, never merged. Raw tables: [`results_table.md`](results_table.md) (`ev
   - 500 Hz gives S nothing: −0.002 [−0.005, 0.001].
   - It helps only C, the design starved to 250 samples per lead: territory +0.017 [0.007, 0.029].
   - It costs about 13× the GFLOP and latency (C: 0.08 → 1.07 GFLOP; S: 0.58 → 7.5).
-  - A at 500 Hz: see the spot check below.
+  - A at 500 Hz (1 seed) gains nothing either: −0.004 [−0.010, 0.001], territory −0.009 [−0.023, 0.002]. It costs 13× the GFLOP (0.33 → 4.29).
 - **ECGFounder: not worth it as the default.**
   - It helps territory: S +0.015 [0.005, 0.026]; A, 500 Hz ECGFounder vs 100 Hz scratch, +0.013 [−0.001, 0.026].
   - It hurts the superclasses by 0.005–0.012.
@@ -47,7 +47,7 @@ PROTOTYPE, never merged. Raw tables: [`results_table.md`](results_table.md) (`ev
   - **Scratch arms:** 30 epochs, one-cycle AdamW at max lr 1e-2, weight decay 1e-2, batch 128, benchmark kernels, ×5 at 500 Hz.
   - **B used max lr 1e-3.** At 1e-2 all 3 seeds collapsed at the one-cycle peak: loss jumped from 0.19 to 0.30 and never recovered. Those runs are kept in `runs_diverged/`.
   - **ECGFounder:** the 12-lead checkpoint, z-scored per record as in its `dataset.py`, at 500 Hz only. Fine-tuned for 10 epochs at max lr 1e-3, batch 64. A feeds it the 12-channel canvas without masks.
-  - **Seeds:** 3 per arm; A 500 Hz scratch has 1.
+  - **Seeds:** 3 per arm. A at 500 Hz from scratch has 1: it was a spot check, with MIOpen off (see #50). B at 500 Hz from scratch was not run; it would take more than 10 GPU-hours per seed.
 
 ## Results (test fold 10, mean of 3 seeds, 95% patient-bootstrap CI)
 
@@ -57,6 +57,7 @@ PROTOTYPE, never merged. Raw tables: [`results_table.md`](results_table.md) (`ev
 | **A 100 Hz scratch** | 0.932 [0.925, 0.938] | 0.971 [0.963, 0.977] | 0.885 [0.864, 0.905] | 0.961 [0.908, 0.999] | 0.937 [0.923, 0.949] | +0.000 [−0.003, 0.004] |
 | B 100 Hz scratch | 0.924 [0.917, 0.931] | 0.965 [0.957, 0.973] | 0.854 [0.828, 0.878] | 0.973 [0.917, 1.000] | 0.929 [0.913, 0.940] | −0.008 [−0.015, 0.002] |
 | C 100 Hz scratch | 0.916 [0.908, 0.923] | 0.959 [0.950, 0.967] | 0.833 [0.809, 0.856] | 0.969 [0.915, 0.999] | 0.919 [0.904, 0.930] | −0.018 [−0.025, −0.009] |
+| A 500 Hz scratch (1 seed) | 0.932 [0.925, 0.939] | 0.967 [0.959, 0.974] | 0.876 [0.849, 0.898] | 0.958 [0.898, 0.998] | 0.933 [0.916, 0.946] | −0.001 [−0.008, 0.005] |
 | S 500 Hz scratch | 0.930 [0.923, 0.936] | 0.967 [0.958, 0.974] | 0.884 [0.863, 0.901] | 0.958 [0.908, 0.999] | 0.935 [0.921, 0.946] | — |
 | C 500 Hz scratch | 0.918 [0.910, 0.925] | 0.961 [0.952, 0.969] | 0.851 [0.827, 0.872] | 0.975 [0.930, 0.999] | 0.926 [0.913, 0.936] | −0.009 [−0.016, 0.001] |
 | S 500 Hz ECGFounder | 0.920 [0.913, 0.926] | 0.968 [0.960, 0.974] | 0.899 [0.884, 0.913] | 0.967 [0.924, 0.999] | 0.939 [0.927, 0.947] | — |
@@ -76,8 +77,10 @@ Seed SDs are ≤0.003, except territory, where they are ≤0.009 (`results_table
 | A vs C, 100 Hz | +0.016 [0.013, 0.020] | +0.052 [0.034, 0.071] | +0.018 [0.009, 0.026] |
 | S: 500 vs 100 Hz | −0.002 [−0.004, −0.000] | −0.000 [−0.009, 0.008] | −0.002 [−0.005, 0.001] |
 | C: 500 vs 100 Hz | +0.002 [0.000, 0.004] | +0.017 [0.007, 0.029] | +0.007 [0.003, 0.011] |
+| A: 500 vs 100 Hz (1 vs 3 seeds) | +0.000 [−0.002, 0.002] | −0.009 [−0.023, 0.002] | −0.004 [−0.010, 0.001] |
 | S: ECGFounder vs scratch, 500 Hz | −0.010 [−0.014, −0.006] | +0.015 [0.005, 0.026] | +0.004 [−0.000, 0.008] |
 | C: ECGFounder vs scratch, 500 Hz | −0.012 [−0.018, −0.008] | +0.017 [0.002, 0.033] | −0.001 [−0.006, 0.005] |
+| A: ECGFounder vs scratch, 500 Hz (3 vs 1 seeds) | −0.005 [−0.009, −0.001] | +0.022 [0.006, 0.041] | +0.011 [0.002, 0.022] |
 | A: ECGFounder 500 Hz vs scratch 100 Hz | −0.005 [−0.009, −0.001] | +0.013 [−0.001, 0.026] | +0.006 [−0.001, 0.015] |
 
 ### Cost (seed-0 model; desktop ONNX Runtime 1.31 CPU, `ENABLE_EXTENDED`, median of 30 runs)
@@ -89,6 +92,7 @@ Seed SDs are ≤0.003, except territory, where they are ≤0.009 (`results_table
 | B 100 Hz | 0.69 M | 0.51 | 4.7 / 2.6 | 64 / 26 | 0.36 [0.14, 0.54] |
 | C 100 Hz | 1.87 M | 0.08 | 1.0 / 1.0 | 9 / 5 | 0.72 [0.54, 0.85] |
 | S 500 Hz (7 windows) | 4.65 M | 7.47 | 59 / 12 | 800 / 141 | 0.57 [0.38, 0.74] |
+| A 500 Hz | 4.66 M | 4.29 | 33 / 6.3 | 434 / 73 | 0.48 [0.22, 0.67] |
 | C 500 Hz | 4.65 M | 1.07 | 8.5 / 2.8 | 111 / 22 | 0.64 [0.48, 0.78] |
 | S 500 Hz ECGFounder (7 windows) | 30.68 M | 4.21 | 73 / 30 | 929 / 352 | 0.65 [0.46, 0.80] |
 | A 500 Hz ECGFounder | 30.68 M | 2.34 | 28 / 10 | 329 / 86 | 0.59 [0.40, 0.72] |
