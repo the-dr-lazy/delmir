@@ -28,12 +28,13 @@ p.add_argument("--lr", type=float, default=None)
 p.add_argument("--bs", type=int, default=128)
 p.add_argument("--threads", type=int, default=8)
 p.add_argument("--runs", default="runs")
+p.add_argument("--tag", default="", help="appended to the init label, e.g. -e20")
 a = p.parse_args()
 torch.set_num_threads(a.threads)
 torch.manual_seed(a.seed)
 np.random.seed(a.seed)
 gen = torch.Generator().manual_seed(a.seed)
-name = f"{a.design}_{a.fs}_{a.init}_s{a.seed}"
+name = f"{a.design}_{a.fs}_{a.init}{a.tag}_s{a.seed}"
 os.makedirs(a.runs, exist_ok=True)
 
 df = pd.read_csv(os.path.join(OUT, "labels.csv"))
@@ -119,8 +120,18 @@ sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=lr, total_steps=steps)
 loss_fn = nn.BCEWithLogitsLoss()
 hs = df.has_super.values.astype(bool)
 Yn = df[TARGETS].values
-best, best_state, log = -1, None, []
-for ep in range(a.epochs):
+best, best_state, best_ep, log, start = -1, None, -1, [], 0
+ckpt = os.path.join(a.runs, name + ".ckpt")
+if os.path.exists(ckpt):  # resume after a kill (the shared host OOM-kills under memory pressure)
+    c = torch.load(ckpt, weights_only=False)
+    model.load_state_dict(c["model"])
+    opt.load_state_dict(c["opt"])
+    sched.load_state_dict(c["sched"])
+    gen.set_state(c["gen"])
+    torch.set_rng_state(c["torch_rng"])
+    best, best_state, best_ep, log, start = c["best"], c["best_state"], c["best_ep"], c["log"], c["ep"] + 1
+    print(f"resumed at epoch {start}", flush=True)
+for ep in range(start, a.epochs):
     model.train()
     t0 = time.time()
     perm = tr[torch.randperm(len(tr), generator=gen).numpy()]
@@ -147,6 +158,10 @@ for ep in range(a.epochs):
     print(json.dumps(log[-1]), flush=True)
     if best_state is None or score > best:
         best, best_state, best_ep = score, {k: v.clone() for k, v in model.state_dict().items()}, ep
+    torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "sched": sched.state_dict(),
+                "gen": gen.get_state(), "torch_rng": torch.get_rng_state(), "best": best,
+                "best_state": best_state, "best_ep": best_ep, "log": log, "ep": ep}, ckpt + ".tmp")
+    os.replace(ckpt + ".tmp", ckpt)
 
 model.load_state_dict(best_state)
 pv, pt = predict(va), predict(te)

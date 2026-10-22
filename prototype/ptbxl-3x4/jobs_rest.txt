@@ -1,0 +1,18 @@
+# after the 06:53 OOM kills: B at lr 1e-3 first, ECGFounder-A seeds, then 20-epoch 500 Hz scratch S/C with matching 20-epoch 100 Hz controls
+--design B --fs 100 --seed 0 --threads 4 --lr 1e-3
+--design B --fs 100 --seed 1 --threads 4 --lr 1e-3
+--design B --fs 100 --seed 2 --threads 4 --lr 1e-3
+--design A --fs 500 --init ecgfounder --seed 1 --threads 4 --epochs 10 --bs 64
+--design A --fs 500 --init ecgfounder --seed 2 --threads 4 --epochs 10 --bs 64
+--design S --fs 500 --seed 0 --threads 4 --epochs 20 --tag -e20
+--design S --fs 100 --seed 0 --threads 4 --epochs 20 --tag -e20
+--design C --fs 500 --seed 0 --threads 4 --epochs 20 --tag -e20
+--design C --fs 100 --seed 0 --threads 4 --epochs 20 --tag -e20
+--design S --fs 500 --seed 1 --threads 4 --epochs 20 --tag -e20
+--design S --fs 100 --seed 1 --threads 4 --epochs 20 --tag -e20
+--design C --fs 500 --seed 1 --threads 4 --epochs 20 --tag -e20
+--design C --fs 100 --seed 1 --threads 4 --epochs 20 --tag -e20
+--design S --fs 500 --seed 2 --threads 4 --epochs 20 --tag -e20
+--design S --fs 100 --seed 2 --threads 4 --epochs 20 --tag -e20
+--design C --fs 500 --seed 2 --threads 4 --epochs 20 --tag -e20
+--design C --fs 100 --seed 2 --threads 4 --epochs 20 --tag -e20
