@@ -1,0 +1,17 @@
+562544 562544 lib/x86_64/libappmodules.so
+1252080 1252080 lib/x86_64/libc++_shared.so
+5290856 5290856 lib/x86_64/libcrypto.so
+6224 6224 lib/x86_64/libdatastore_shared_counter.so
+172952 172952 lib/x86_64/libfbjni.so
+137744 137744 lib/x86_64/libhermestooling.so
+2830688 2830688 lib/x86_64/libhermesvm.so
+8464 8464 lib/x86_64/libimagepipeline.so
+418872 418872 lib/x86_64/libjsi.so
+270784 270784 lib/x86_64/libnative-filters.so
+720432 720432 lib/x86_64/libnative-imagetranscoder.so
+1706088 1706088 lib/x86_64/libop-sqlite.so
+1003088 1003088 lib/x86_64/libreact_codegen_rnscreens.so
+127216 127216 lib/x86_64/libreact_codegen_safeareacontext.so
+7258056 7258056 lib/x86_64/libreactnative.so
+100768 100768 lib/x86_64/librnscreens.so
+2958488 2958488 assets/index.android.bundle

@@ -1,0 +1,10 @@
+run=1 am_total_ms=571 start_to_first_screen_ms=974.000
+run=2 am_total_ms=895 start_to_first_screen_ms=1453.000
+run=3 am_total_ms=679 start_to_first_screen_ms=1024.000
+run=4 am_total_ms=594 start_to_first_screen_ms=904.000
+run=5 am_total_ms=572 start_to_first_screen_ms=954.000
+run=6 am_total_ms=655 start_to_first_screen_ms=950.000
+run=7 am_total_ms=543 start_to_first_screen_ms=913.000
+run=8 am_total_ms=524 start_to_first_screen_ms=849.000
+run=9 am_total_ms=672 start_to_first_screen_ms=968.000
+run=10 am_total_ms=577 start_to_first_screen_ms=857.000

@@ -1,0 +1,16 @@
+1810216 1810216 lib/x86_64/libappmodules.so
+1252080 1252080 lib/x86_64/libc++_shared.so
+5290856 5290856 lib/x86_64/libcrypto.so
+6224 6224 lib/x86_64/libdatastore_shared_counter.so
+172952 172952 lib/x86_64/libfbjni.so
+536136 536136 lib/x86_64/libhermestooling.so
+4344800 4344800 lib/x86_64/libhermesvm.so
+8464 8464 lib/x86_64/libimagepipeline.so
+928392 928392 lib/x86_64/libjsi.so
+270784 270784 lib/x86_64/libnative-filters.so
+720432 720432 lib/x86_64/libnative-imagetranscoder.so
+1837440 1837440 lib/x86_64/libop-sqlite.so
+3072600 3072600 lib/x86_64/libreact_codegen_rnscreens.so
+409504 409504 lib/x86_64/libreact_codegen_safeareacontext.so
+23223432 23223432 lib/x86_64/libreactnative.so
+338328 338328 lib/x86_64/librnscreens.so

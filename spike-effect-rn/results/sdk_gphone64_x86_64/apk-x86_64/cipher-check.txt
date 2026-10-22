@@ -1,0 +1,10 @@
+--- sqlite3 plain-probe.db (control)
+DELMIR-SECRET-MARKER
+--- sqlite3 cipher-probe.db
+Error: in prepare, file is not a database (26)
+--- grep marker in raw bytes
+results/sdk_gphone64_x86_64/apk-x86_64/plain-probe.db:1
+results/sdk_gphone64_x86_64/apk-x86_64/cipher-probe.db:0
+--- sqlcipher cipher-probe.db with the key
+ok
+DELMIR-SECRET-MARKER
