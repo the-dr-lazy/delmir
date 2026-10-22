@@ -62,7 +62,7 @@ for v in "${VARIANTS[@]}"; do
   adb uninstall $PKG >/dev/null 2>&1 || true
   adb install "$OUT/$v/signed.apk" >/dev/null
 
-  if [ "$v" = apk-debug ]; then
+  if [[ $v == apk-debug* ]]; then
     # Dev: Metro serves the bundle over adb reverse, and Hermes compiles it from source on the phone.
     adb reverse tcp:8081 tcp:8081
     npx react-native start --reset-cache > "$OUT/$v/metro.log" 2>&1 &
@@ -81,7 +81,7 @@ for v in "${VARIANTS[@]}"; do
   adb logcat -c; t0=$(since)
   adb shell am start -W -n $ACT >/dev/null
   wait_event first-screen "$t0" 60 >/dev/null
-  if [ "$v" != apk-baseline ]; then
+  if [[ $v != apk-baseline* ]]; then
     wait_event first-data "$t0" 60 >/dev/null
     adb logcat -d -v epoch -s ReactNativeJS:I | grep -F 'SPIKE {"event":"' | json >> "$OUT/$v/events.jsonl"
   else
@@ -98,7 +98,7 @@ for v in "${VARIANTS[@]}"; do
     st=$(adb logcat -d -v epoch | grep -E 'START u0 .*'"$PKG" | head -1 | awk '{print $1}')
     echo "run=$i am_total_ms=$total start_to_first_screen_ms=$(echo "($fs - $st) * 1000" | bc)" | tee -a "$OUT/$v/cold-start.txt"
   done
-  [ "$v" = apk-baseline ] && continue
+  [[ $v == apk-baseline* ]] && continue
 
   cmd "$v" "delmirspike://checks" checks
   cmd "$v" "delmirspike://migrations" migrations
@@ -109,7 +109,7 @@ for v in "${VARIANTS[@]}"; do
     adb shell dumpsys gfxinfo $PKG | grep -E 'Total frames rendered|Janky frames|percentile' > "$OUT/$v/gfxinfo-$mode.txt"
   done
 
-  if [ "$v" = apk ]; then
+  if [ "$v" = apk ] || [ "$v" = apk-x86_64 ]; then
     # SQLCipher really on? Probe DBs live in the external files dir, the only place adb can read
     # on a non-debuggable release build.
     cmd "$v" "delmirspike://cipher" cipher-probe

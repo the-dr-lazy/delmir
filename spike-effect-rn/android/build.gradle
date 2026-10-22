@@ -31,3 +31,18 @@ subprojects {
         }
     }
 }
+
+// SPIKE (delmir#43): react-native-keychain, -screens and -safe-area-context ask for
+// com.facebook.react:react-native:+ / react-android:+. A dynamic version makes Gradle read Google
+// Maven's master-index.xml and group-index.xml, which change on every Google release, so the
+// recorded deps.json went stale within hours (hash mismatch). Resolve `+` to the RN version instead.
+def reactNativeVersion = new groovy.json.JsonSlurper().parse(file("../node_modules/react-native/package.json")).version
+allprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == "com.facebook.react" && details.requested.version == "+") {
+                details.useVersion(reactNativeVersion)
+            }
+        }
+    }
+}

@@ -1,6 +1,6 @@
-# THROWAWAY SPIKE for the-dr-lazy/delmir#43: records the Gradle lockfiles and builds every APK
-# variant with Nix on a stock runner (the local host's network drops mitm-cache fetches).
-# Lives only on the spike branch.
+# THROWAWAY SPIKE for the-dr-lazy/delmir#43: records the Gradle lockfile, builds every APK variant
+# with Nix, then runs device.sh against the x86_64 builds on a KVM emulator. Lives only on the
+# spike branch. (The local host's network drops mitm-cache and cache.nixos.org fetches.)
 name: spike-effect-rn
 on:
   push:
@@ -10,36 +10,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v31
       - name: Record deps.json
         run: |
-          for v in apk; do
-            nix build ./spike-effect-rn#$v.mitmCache.updateScript --out-link us-$v
-            for i in 1 2 3; do
-              # Ubuntu 24.04 blocks unprivileged user namespaces, so no bwrap.
-              USE_BWRAP=0 ./us-$v && break
-              [ $i = 3 ] && exit 1
-            done
+          nix build ./spike-effect-rn#apk.mitmCache.updateScript --out-link us
+          for i in 1 2 3; do
+            # Ubuntu 24.04 blocks unprivileged user namespaces, so no bwrap.
+            USE_BWRAP=0 ./us && break
+            [ $i = 3 ] && exit 1
           done
-          ls -l spike-effect-rn/deps*.json
+          ls -l spike-effect-rn/deps.json
+          echo "mutable Google Maven index entries: $(grep -c -E 'group-index|master-index' spike-effect-rn/deps.json || true)"
+          git diff --stat -- spike-effect-rn/deps.json
       - uses: actions/upload-artifact@v4
         with:
-          name: lockfiles
-          path: spike-effect-rn/deps*.json
-      - name: Build APK variants (sandboxed)
+          name: lockfile
+          path: spike-effect-rn/deps.json
+      - name: Build APK variants and the emulator (sandboxed)
         run: |
           mkdir -p apks
-          for v in apk apk-op18 apk-local apk-baseline apk-debug; do
+          for v in apk apk-op18 apk-local apk-baseline apk-debug \
+                   apk-x86_64 apk-op18-x86_64 apk-local-x86_64 apk-baseline-x86_64 apk-debug-x86_64 emulator; do
             t0=$(date +%s)
             nix build ./spike-effect-rn#$v -L --out-link result-$v > build-$v.log 2>&1 \
               && echo "$v ok $(( $(date +%s) - t0 )) s" || { tail -n 80 build-$v.log; echo "$v FAILED"; }
-            grep -h "OP-SQLITE" build-$v.log | sort -u || true
             cp result-$v/*.apk apks/ 2>/dev/null || true
           done
           ls -l apks
+          df -h /
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -47,3 +48,21 @@ jobs:
           path: |
             apks/*.apk
             build-*.log
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l /dev/kvm
+      - name: Emulator run (x86_64 builds; correctness, timings only indicative)
+        run: |
+          cd spike-effect-rn
+          npm ci --no-audit --no-fund && sh patch-migrator.sh node_modules   # Metro for the dev run
+          NIX_ANDROID_EMULATOR_FLAGS="-no-window -gpu swiftshader_indirect -no-audio -no-snapshot" ../result-emulator/bin/run-test-emulator
+          APK_DIR=$PWD/../apks timeout 5400 nix shell nixpkgs#android-tools nixpkgs#sqlcipher nixpkgs#bc nixpkgs#jdk17_headless -c \
+            ./device.sh apk-x86_64 apk-op18-x86_64 apk-local-x86_64 apk-baseline-x86_64 apk-debug-x86_64
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: emulator-results
+          path: spike-effect-rn/results
