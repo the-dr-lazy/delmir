@@ -106,3 +106,28 @@ n_mi = int(Y[:, TARGETS.index("MI")].sum())
 print(f"\nTest positives: MI {n_mi}; " + ", ".join(
     f"{t} {int(Y[Y[:, TARGETS.index('MI')] == 1, TARGETS.index(t)].sum())}" for t in TARGETS[5:11])
       + f" (within MI); INJSTE {int(Y[:, -1].sum())}; NORM {int(Y[:, 0].sum())}.")
+
+# Decision contrasts: paired patient bootstrap of (first − second), per task and mean4.
+PAIRS = [
+    ("A_100_scratch", "S_100_scratch", "masked canvas vs synchronous upper bound"),
+    ("B_100_scratch", "S_100_scratch", "per-lead encoder vs upper bound"),
+    ("C_100_scratch", "S_100_scratch", "pseudo-synchronous vs upper bound"),
+    ("A_100_scratch", "B_100_scratch", "A vs B"),
+    ("A_100_scratch", "C_100_scratch", "A vs C"),
+    ("S_500_scratch", "S_100_scratch", "500 vs 100 Hz, S"),
+    ("C_500_scratch", "C_100_scratch", "500 vs 100 Hz, C"),
+    ("A_500_scratch", "A_100_scratch", "500 vs 100 Hz, A"),
+    ("S_500_ecgfounder", "S_500_scratch", "ECGFounder vs scratch at 500 Hz, S"),
+    ("C_500_ecgfounder", "C_500_scratch", "ECGFounder vs scratch at 500 Hz, C"),
+    ("A_500_ecgfounder", "A_500_scratch", "ECGFounder vs scratch at 500 Hz, A"),
+    ("S_500_ecgfounder", "S_100_scratch", "ECGFounder 500 Hz vs scratch 100 Hz, S"),
+    ("C_500_ecgfounder", "C_100_scratch", "ECGFounder 500 Hz vs scratch 100 Hz, C"),
+    ("A_500_ecgfounder", "A_100_scratch", "ECGFounder 500 Hz vs scratch 100 Hz, A"),
+]
+print("\nDecision contrasts (first − second), paired patient bootstrap:\n")
+print("| contrast | " + " | ".join(cols) + " |")
+print("|---|" + "---|" * len(cols))
+for a1, a2, label in PAIRS:
+    if a1 in point and a2 in point:
+        print(f"| {label} ({meta[a1]['seeds']} vs {meta[a2]['seeds']} seeds) | " + " | ".join(
+            f"{point[a1][i] - point[a2][i]:+.3f} {ci(boot[a1][:, i] - boot[a2][:, i])}" for i in range(len(cols))) + " |")
