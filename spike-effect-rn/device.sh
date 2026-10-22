@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # THROWAWAY SPIKE (delmir#43): installs the Nix-built APKs on the USB phone and records every
 # on-device measurement into results/. No taps needed: commands go in as delmirspike:// links.
-# Usage (from spike-effect-rn/): nix shell nixpkgs#android-tools nixpkgs#sqlcipher -c ./device.sh [variant...]
+# Usage (from spike-effect-rn/): nix shell nixpkgs#android-tools nixpkgs#sqlcipher nixpkgs#bc nixpkgs#jdk17_headless -c ./device.sh [variant...]
+# APK_DIR=<dir> takes delmir-spike-<variant>.apk files from there (e.g. the CI artifact) instead of `nix build`.
 set -euo pipefail
 cd "$(dirname "$0")"
 PKG=com.delmirspike
 ACT=$PKG/com.helloworld.MainActivity
-OUT=results
+adb get-state >/dev/null
+OUT=results/$(adb shell getprop ro.product.model | tr -d '\r' | tr ' ' '_')
 mkdir -p "$OUT"
 if [ $# -gt 0 ]; then VARIANTS=("$@"); else VARIANTS=(apk apk-op18 apk-local apk-baseline apk-debug); fi
 
-adb get-state >/dev/null
 SDK=$(nix build --no-link --print-out-paths .#apk.androidsdk)/libexec/android-sdk
 APKSIGNER=$SDK/build-tools/37.0.0/apksigner
 
@@ -48,7 +49,12 @@ cmd() { # variant url event
 for v in "${VARIANTS[@]}"; do
   echo "=== $v"
   mkdir -p "$OUT/$v"; : > "$OUT/$v/events.jsonl"
-  apk=$(ls "$(nix build --no-link --print-out-paths ".#$v")"/*.apk)
+  if [ -n "${APK_DIR:-}" ]; then
+    name=$(nix eval --raw ".#$v.name"); name=${name#delmir-spike-apk-}; apk=$APK_DIR/delmir-spike-${name%-0.0.1}.apk
+  else
+    apk=$(ls "$(nix build --no-link --print-out-paths ".#$v")"/*.apk)
+  fi
+  echo "apk=$apk"
   "$APKSIGNER" sign --ks android/app/debug.keystore --ks-pass pass:android --key-pass pass:android \
     --out "$OUT/$v/signed.apk" "$apk"
   unzip -lv "$apk" | grep -E 'index.android.bundle|\.so$' | awk '{print $1, $3, $8}' > "$OUT/$v/apk-entries.txt"

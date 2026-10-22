@@ -77,4 +77,5 @@ yarn-error.log
 # Spike
 /us
 /result*
-results/*/signed.apk
+results/**/signed.apk*
+results/**/*.db

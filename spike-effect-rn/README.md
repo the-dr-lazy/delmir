@@ -25,7 +25,7 @@ Entry files: `index.js` (Effect, Migrator runner, plus both runners on scratch D
 ```sh
 nix build ./spike-effect-rn#apk -L        # also: #apk-op18 #apk-local #apk-baseline #apk-debug
 nix build ./spike-effect-rn#apk.mitmCache.updateScript -o us && USE_BWRAP=0 ./us   # from the repo root
-cd spike-effect-rn && nix shell nixpkgs#android-tools nixpkgs#sqlcipher -c ./device.sh   # phone on USB
+cd spike-effect-rn && nix shell nixpkgs#android-tools nixpkgs#sqlcipher nixpkgs#bc nixpkgs#jdk17_headless -c ./device.sh   # phone on USB
 ```
 
 `device.sh` signs each APK with the debug keystore, installs it, and drives the app with `delmirspike://` links

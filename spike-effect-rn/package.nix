@@ -5,6 +5,7 @@
   opSqlite18 ? false,
   buildType ? "release",
   patchMigrator ? true,
+  abi ? "arm64-v8a", # x86_64 only for the local KVM emulator
 
   lib,
   stdenv,
@@ -83,6 +84,7 @@ let
     [ (lib.removeSuffix ".js" entry) ]
     ++ lib.optional opSqlite18 "op18"
     ++ lib.optional (!patchMigrator) "unpatched"
+    ++ lib.optional (abi != "arm64-v8a") abi
     ++ [ buildType ]
   );
   gradleTask = if buildType == "debug" then ":app:assembleDebug" else ":app:assembleRelease";
@@ -120,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dorg.gradle.java.installations.paths=${jdk.home}"
     "-Pandroid.aapt2FromMavenOverride=${sdk}/build-tools/37.0.0/aapt2"
     "-Pkotlin.compiler.execution.strategy=in-process"
-    "-PreactNativeArchitectures=arm64-v8a"
+    "-PreactNativeArchitectures=${abi}"
     "-PincludeJitpackRepository=false"
     "-PspikeEntry=${entry}"
     "-x"
