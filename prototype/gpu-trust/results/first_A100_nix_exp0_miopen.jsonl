@@ -1,0 +1,17 @@
+{"probe": "start", "model": "A_100_scratch_s0", "python": "/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/bin/python", "torch": "2.13.0", "hip": "7.2.53211", "device": "AMD Radeon RX 6600 XT", "env": {"DELMIR_NO_MIOPEN": "", "ROCR_VISIBLE_DEVICES": "0", "HSA_OVERRIDE_GFX_VERSION_1": "10.3.0"}, "od": "OD_SCLK: 0: 700Mhz 1: 2500Mhz OD_MCLK: 0: 97Mhz 1: 1000MHz OD_RANGE: SCLK: 500Mhz 3150Mhz MCLK: 674Mhz 1200Mhz OD_VDDGFX_OFFSET: -75mV", "cudnn": true, "benchmark": false}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 256, "call": 0, "sec": 1.1502034664154053, "max_abs": 6.556510925292969e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 256, "call": 1, "sec": 0.0845940113067627, "max_abs": 6.556510925292969e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 256, "call": 2, "sec": 0.08455300331115723, "max_abs": 6.556510925292969e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 256, "call": 3, "sec": 0.08466029167175293, "max_abs": 6.556510925292969e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 150, "call": 0, "sec": 0.059026241302490234, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 150, "call": 1, "sec": 0.04759550094604492, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 150, "call": 2, "sec": 0.04743313789367676, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 150, "call": 3, "sec": 0.04810380935668945, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 135, "call": 0, "sec": 0.04862260818481445, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 135, "call": 1, "sec": 0.04315805435180664, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 135, "call": 2, "sec": 0.0425717830657959, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 135, "call": 3, "sec": 0.043366193771362305, "max_abs": 4.76837158203125e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 7, "call": 0, "sec": 0.03031158447265625, "max_abs": 2.086162567138672e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 7, "call": 1, "sec": 0.008696794509887695, "max_abs": 2.086162567138672e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 7, "call": 2, "sec": 0.008394956588745117, "max_abs": 2.086162567138672e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "A_100_scratch_s0", "bs": 7, "call": 3, "sec": 0.00852060317993164, "max_abs": 2.086162567138672e-07, "bad_rows": 0, "bad": []}
