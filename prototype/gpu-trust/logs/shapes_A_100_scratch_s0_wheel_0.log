@@ -1,0 +1,14 @@
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 0, 'bs': 256, 'sec': 2.8831326961517334, 'error': None, 'max_abs': 0.999974250793457, 'nan_rows': 0, 'bad_rows': 389, 'bad_first': 0, 'bad_last': 2197}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 0, 'bs': 150, 'sec': 1.9889044761657715, 'error': None, 'max_abs': 0.9868645071983337, 'nan_rows': 0, 'bad_rows': 1818, 'bad_first': 0, 'bad_last': 2197}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 0, 'bs': 135, 'sec': 1.5194149017333984, 'error': None, 'max_abs': 0.9976205825805664, 'nan_rows': 0, 'bad_rows': 1407, 'bad_first': 0, 'bad_last': 2197}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 0, 'bs': 7, 'sec': 2.213355779647827, 'error': None, 'max_abs': 6.854534149169922e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 0, 'bs': 1, 'sec': 17.050211906433105, 'error': None, 'max_abs': 6.854534149169922e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 1, 'bs': 256, 'sec': 0.7221939563751221, 'error': None, 'max_abs': 5.364418029785156e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 1, 'bs': 150, 'sec': 0.6915202140808105, 'error': None, 'max_abs': 6.854534149169922e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 1, 'bs': 135, 'sec': 0.7995004653930664, 'error': None, 'max_abs': 5.662441253662109e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 1, 'bs': 7, 'sec': 2.1972177028656006, 'error': None, 'max_abs': 6.854534149169922e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_100_scratch_s0', 'rep': 1, 'bs': 1, 'sec': 16.859284162521362, 'error': None, 'max_abs': 6.854534149169922e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}

@@ -1,0 +1,30 @@
+• Running devenv:files:cleanup
+✓ Running devenv:files:cleanup in 8.40ms
+• Running devenv:enterShell
+✓ Running devenv:enterShell in 7.13ms
+Fatal Python error: Fatal Python error: Segmentation faultSegmentation fault
+
+
+
+Current thread 0x00007e0d57828780 (most recent call first):
+  File "/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/conv.py", line 380 in _conv_forward
+Extension modules: 
+numpy._core._multiarray_umath  File "/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/conv.py, "numpy.linalg._umath_linalg, line 385 in forward
+  File "/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.py, "torch._C, line , 1789torch._C._dynamo.autograd_compiler in , _call_impltorch._C._dynamo.eval_frame
+,   File torch._C._dynamo.guards", /nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.pytorch._C._dynamo.utils", , line torch._C._fft1778,  in torch._C._linalg_wrapped_call_impl, 
+torch._C._nested  File , "torch._C._nn/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/container.py, "torch._C._sparse, line , 253torch._C._special in forward
+  File "/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1789 in _call_impl
+  File ", /nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.pynumpy.random._common", , line numpy.random.bit_generator1778,  in numpy.random._bounded_integers_wrapped_call_impl, 
+numpy.random._pcg64  File , "numpy.random._generator/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/container.py, "numpy.random._mt19937, line , 253numpy.random._philox in , forwardnumpy.random._sfc64
+,   File numpy.random.mtrand", /nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.py_cyutility", , line pandas._libs._cyutility1789,  in pandas._libs.tslibs.ccalendar_call_impl, 
+pandas._libs.tslibs.np_datetime  File , "pandas._libs.tslibs.dtypes/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.py, "pandas._libs.tslibs.base, line , 1778pandas._libs.tslibs.nattype in _wrapped_call_impl, 
+pandas._libs.tslibs.timezones  File , "pandas._libs.properties/home/personal/workspaces/delmir/.claude/worktrees/happy-villani-1d7163/prototype/gpu-trust/models.py, "pandas._libs.tslibs.fields, line , 33pandas._libs.tslibs.timedeltas in , forwardpandas._libs.tslibs.tzconversion
+,   File pandas._libs.tslibs.timestamps", /nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.pypandas._libs.tslibs.offsets", , line pandas._libs.tslibs.strptime1789,  in pandas._libs.tslibs.parsing_call_impl, 
+pandas._libs.tslibs.conversion  File , "pandas._libs.tslibs.period/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.py, "pandas._libs.tslibs.vectorized, line , 1778pandas._libs.ops_dispatch in , _wrapped_call_implpandas._libs.missing
+,   File pandas._libs.hashtable", /nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/container.pypandas._libs.algos", , line pandas._libs.interval253,  in pandas._libs.libforward
+,   File pandas._libs.ops", /nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.pypandas._libs.hashing", , line pandas._libs.arrays1789,  in pandas._libs.tslib_call_impl, 
+pandas._libs.sparse  File , "pandas._libs.internals/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.py, ", line pandas._libs.indexing1778,  in pandas._libs.index_wrapped_call_impl, 
+pandas._libs.writers  File , "pandas._libs.join/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/container.py, "pandas._libs.window.aggregations, line , 253pandas._libs.window.indexers in , forwardpandas._libs.reshape
+,   File pandas._libs.groupby", /nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.pypandas._libs.json", , line pandas._libs.parsers1789,  in pandas._libs.testing_call_impl
+  File "/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/lib/python3.13/site-packages/torch/nn/modules/module.py" (total: , line 641778) in 
+_wrapped_call_impl

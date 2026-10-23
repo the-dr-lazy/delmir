@@ -1,0 +1,8 @@
+• Running devenv:files:cleanup
+✓ Running devenv:files:cleanup in 7.86ms
+• Running devenv:enterShell
+✓ Running devenv:enterShell in 8.03ms
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 256, 'call': 0, 'sec': 1.945643663406372, 'max_abs': 5.662441253662109e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 256, 'call': 1, 'sec': 0.26487016677856445, 'max_abs': 5.662441253662109e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 7, 'call': 0, 'sec': 0.042948007583618164, 'max_abs': 2.682209014892578e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 7, 'call': 1, 'sec': 0.010065555572509766, 'max_abs': 2.682209014892578e-07, 'bad_rows': 0, 'bad': []}

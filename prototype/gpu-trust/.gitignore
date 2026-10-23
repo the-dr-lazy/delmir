@@ -2,6 +2,5 @@
 .devenv.flake.nix
 .direnv/
 refs/
-logs/
 runs/
 __pycache__/

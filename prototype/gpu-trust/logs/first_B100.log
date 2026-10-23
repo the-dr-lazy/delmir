@@ -1,0 +1,20 @@
+• Running devenv:files:cleanup
+✓ Running devenv:files:cleanup in 9.35ms
+• Running devenv:enterShell
+✓ Running devenv:enterShell in 8.83ms
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 1, 'call': 0, 'sec': 1.720548152923584, 'max_abs': 2.9802322387695312e-08, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 1, 'call': 1, 'sec': 0.006132364273071289, 'max_abs': 2.9802322387695312e-08, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 7, 'call': 0, 'sec': 0.03522801399230957, 'max_abs': 2.682209014892578e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 7, 'call': 1, 'sec': 0.010021686553955078, 'max_abs': 2.682209014892578e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 16, 'call': 0, 'sec': 2.1862659454345703, 'max_abs': 6.258487701416016e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 16, 'call': 1, 'sec': 0.016230106353759766, 'max_abs': 6.258487701416016e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 32, 'call': 0, 'sec': 3.9978599548339844, 'max_abs': 5.960464477539062e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 32, 'call': 1, 'sec': 0.0315244197845459, 'max_abs': 5.960464477539062e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 64, 'call': 0, 'sec': 7.706826448440552, 'max_abs': 4.76837158203125e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 64, 'call': 1, 'sec': 0.06310796737670898, 'max_abs': 4.76837158203125e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 135, 'call': 0, 'sec': 0.22769689559936523, 'max_abs': 5.662441253662109e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 135, 'call': 1, 'sec': 0.21221470832824707, 'max_abs': 5.662441253662109e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 150, 'call': 0, 'sec': 0.28904032707214355, 'max_abs': 4.76837158203125e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 150, 'call': 1, 'sec': 0.2779974937438965, 'max_abs': 4.76837158203125e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 256, 'call': 0, 'sec': 0.2731444835662842, 'max_abs': 5.662441253662109e-07, 'bad_rows': 0, 'bad': []}
+{'probe': 'first', 'model': 'B_100_scratch_s0', 'bs': 256, 'call': 1, 'sec': 0.26407647132873535, 'max_abs': 5.662441253662109e-07, 'bad_rows': 0, 'bad': []}

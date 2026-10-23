@@ -1,0 +1,18 @@
+10:42:54 A_100_scratch_s0_nix_exp0 exit 0
+10:43:39 A_100_scratch_s0_nix_exp1 exit 0
+10:44:36 A_100_scratch_s0_wheel_exp0 exit 0
+10:45:19 B_100_scratch_s0_nix_exp0 exit 0
+10:45:30 B_100_scratch_s0_nix_exp1 exit 0
+10:45:37 B_100_scratch_s0_wheel_exp0 exit 0
+10:52:15 S_500_scratch_s0_nix_exp0 exit 0
+10:58:01 S_500_scratch_s0_nix_exp1 exit 0
+11:03:47 S_500_scratch_s0_wheel_exp0 exit 0
+11:06:30 A_500_scratch_s0_nix_exp0 exit 0
+11:07:53 A_500_scratch_s0_nix_exp1 exit 0
+11:10:11 A_500_scratch_s0_wheel_exp0 exit 0
+11:13:06 A_500_ecgfounder_s1_nix_exp0 exit 0
+11:14:22 A_500_ecgfounder_s1_nix_exp1 exit 0
+11:16:31 A_500_ecgfounder_s1_wheel_exp0 exit 0
+13:45:37 B_100_scratch_s0_nix_exp0 rerun exit 0
+13:45:46 B_100_scratch_s0_nix_exp1 rerun exit 0
+13:45:54 B_100_scratch_s0_wheel_exp0 rerun exit 0

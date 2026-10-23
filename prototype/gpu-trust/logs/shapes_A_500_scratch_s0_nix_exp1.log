@@ -1,0 +1,14 @@
+• Running devenv:files:cleanup
+✓ Running devenv:files:cleanup in 7.96ms
+• Running devenv:enterShell
+✓ Running devenv:enterShell in 7.58ms
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 0, 'bs': 256, 'sec': 6.417500734329224, 'error': None, 'max_abs': 0.9983314275741577, 'nan_rows': 0, 'bad_rows': 406, 'bad_first': 0, 'bad_last': 2197}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 0, 'bs': 150, 'sec': 5.351761102676392, 'error': None, 'max_abs': 0.9441978931427002, 'nan_rows': 0, 'bad_rows': 220, 'bad_first': 4, 'bad_last': 2194}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 0, 'bs': 135, 'sec': 5.360900163650513, 'error': None, 'max_abs': 0.9934011697769165, 'nan_rows': 0, 'bad_rows': 252, 'bad_first': 0, 'bad_last': 2193}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 0, 'bs': 7, 'sec': 5.445863246917725, 'error': None, 'max_abs': 0.9088337421417236, 'nan_rows': 0, 'bad_rows': 14, 'bad_first': 0, 'bad_last': 13}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 0, 'bs': 1, 'sec': 17.57010006904602, 'error': None, 'max_abs': 0.708063542842865, 'nan_rows': 0, 'bad_rows': 1, 'bad_first': 0, 'bad_last': 0}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 1, 'bs': 256, 'sec': 5.421768426895142, 'error': None, 'max_abs': 5.960464477539062e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 1, 'bs': 150, 'sec': 5.325511455535889, 'error': None, 'max_abs': 5.364418029785156e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 1, 'bs': 135, 'sec': 5.30951714515686, 'error': None, 'max_abs': 5.364418029785156e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 1, 'bs': 7, 'sec': 5.440516471862793, 'error': None, 'max_abs': 5.364418029785156e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_scratch_s0', 'rep': 1, 'bs': 1, 'sec': 17.328181982040405, 'error': None, 'max_abs': 5.960464477539062e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}

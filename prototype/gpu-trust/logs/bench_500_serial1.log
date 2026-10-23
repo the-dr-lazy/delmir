@@ -1,0 +1,5 @@
+• Running devenv:files:cleanup
+✓ Running devenv:files:cleanup in 7.84ms
+• Running devenv:enterShell
+✓ Running devenv:enterShell in 7.94ms
+{'fs': 500, 'first_step_s': 5.132685422897339, 'samples_per_s': 117.9309468218705, 'loss_finite': True, 'peak_gib': 6.047802925109863}

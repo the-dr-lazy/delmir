@@ -1,0 +1,14 @@
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+(null): No such file or directory
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 256, 'sec': 24.861136436462402, 'error': None, 'max_abs': 8.642673492431641e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 150, 'sec': 17.437283754348755, 'error': None, 'max_abs': 8.344650268554688e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 135, 'sec': 26.919914722442627, 'error': None, 'max_abs': 7.748603820800781e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 7, 'sec': 6.518527984619141, 'error': None, 'max_abs': 8.940696716308594e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 1, 'sec': 15.067362546920776, 'error': None, 'max_abs': 8.344650268554688e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 256, 'sec': 5.123621940612793, 'error': None, 'max_abs': 8.642673492431641e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 150, 'sec': 5.063305854797363, 'error': None, 'max_abs': 8.344650268554688e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 135, 'sec': 5.0413501262664795, 'error': None, 'max_abs': 7.748603820800781e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 7, 'sec': 5.421812295913696, 'error': None, 'max_abs': 8.940696716308594e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 1, 'sec': 14.712221384048462, 'error': None, 'max_abs': 8.344650268554688e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}

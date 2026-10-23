@@ -1,0 +1,14 @@
+• Running devenv:files:cleanup
+✓ Running devenv:files:cleanup in 8.14ms
+• Running devenv:enterShell
+✓ Running devenv:enterShell in 7.80ms
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 256, 'sec': 5.821007490158081, 'error': None, 'max_abs': 0.9999874830245972, 'nan_rows': 0, 'bad_rows': 398, 'bad_first': 0, 'bad_last': 2197}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 150, 'sec': 5.074589967727661, 'error': None, 'max_abs': 0.9953833222389221, 'nan_rows': 0, 'bad_rows': 223, 'bad_first': 0, 'bad_last': 2197}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 135, 'sec': 5.0679638385772705, 'error': None, 'max_abs': 0.9940809607505798, 'nan_rows': 0, 'bad_rows': 200, 'bad_first': 0, 'bad_last': 264}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 7, 'sec': 5.647808074951172, 'error': None, 'max_abs': 0.7838420867919922, 'nan_rows': 0, 'bad_rows': 7, 'bad_first': 609, 'bad_last': 615}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 0, 'bs': 1, 'sec': 15.262433052062988, 'error': None, 'max_abs': 0.45548802614212036, 'nan_rows': 0, 'bad_rows': 1, 'bad_first': 1, 'bad_last': 1}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 256, 'sec': 5.108513355255127, 'error': None, 'max_abs': 0.9935271143913269, 'nan_rows': 0, 'bad_rows': 585, 'bad_first': 28, 'bad_last': 1890}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 150, 'sec': 5.0645506381988525, 'error': None, 'max_abs': 0.9886612296104431, 'nan_rows': 0, 'bad_rows': 16, 'bad_first': 2100, 'bad_last': 2174}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 135, 'sec': 5.052586317062378, 'error': None, 'max_abs': 7.748603820800781e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 7, 'sec': 5.420623302459717, 'error': None, 'max_abs': 8.940696716308594e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
+{'probe': 'shape', 'model': 'A_500_ecgfounder_s1', 'rep': 1, 'bs': 1, 'sec': 15.22660493850708, 'error': None, 'max_abs': 8.344650268554688e-07, 'nan_rows': 0, 'bad_rows': 0, 'bad_first': None, 'bad_last': None}
