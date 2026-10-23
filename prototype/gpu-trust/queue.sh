@@ -18,6 +18,6 @@ STACK=nix EXPANDABLE=0 ./run.sh train.py $COMMON --fs 100 > logs/train_A100.log 
 log "train A100 exit $?"
 STACK=nix EXPANDABLE=0 ./run.sh train.py $COMMON --fs 500 --parity 300 > logs/train_A500.log 2>&1
 log "train A500 exit $?"
-STACK=nix EXPANDABLE=1 ./run.sh train.py $COMMON --fs 100 --tag -exp1 > logs/train_A100_exp1.log 2>&1
+STACK=nix EXPANDABLE=1 ./run.sh train.py $COMMON --fs 100 --tag=-exp1 > logs/train_A100_exp1.log 2>&1
 log "train A100 exp1 exit $?"
 log "queue done"

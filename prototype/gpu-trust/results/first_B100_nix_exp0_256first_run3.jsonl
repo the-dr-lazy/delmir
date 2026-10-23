@@ -1,0 +1,5 @@
+{"probe": "start", "model": "B_100_scratch_s0", "python": "/nix/store/zq8hp0cfh19sblcav4kb4dhqb2bk9n2q-python3-3.13.16-env/bin/python", "torch": "2.13.0", "hip": "7.2.53211", "device": "AMD Radeon RX 6600 XT", "env": {"ROCR_VISIBLE_DEVICES": "0", "HSA_OVERRIDE_GFX_VERSION_1": "10.3.0"}, "od": "OD_SCLK: 0: 700Mhz 1: 2500Mhz OD_MCLK: 0: 97Mhz 1: 1000MHz OD_RANGE: SCLK: 500Mhz 3150Mhz MCLK: 674Mhz 1200Mhz OD_VDDGFX_OFFSET: -75mV", "cudnn": true, "benchmark": false}
+{"probe": "first", "model": "B_100_scratch_s0", "bs": 256, "call": 0, "sec": 1.945643663406372, "max_abs": 5.662441253662109e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "B_100_scratch_s0", "bs": 256, "call": 1, "sec": 0.26487016677856445, "max_abs": 5.662441253662109e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "B_100_scratch_s0", "bs": 7, "call": 0, "sec": 0.042948007583618164, "max_abs": 2.682209014892578e-07, "bad_rows": 0, "bad": []}
+{"probe": "first", "model": "B_100_scratch_s0", "bs": 7, "call": 1, "sec": 0.010065555572509766, "max_abs": 2.682209014892578e-07, "bad_rows": 0, "bad": []}
